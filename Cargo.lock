@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "cx-reed-solomon"
+name = "reed_solomon_cx"
 version = "0.1.0"

@@ -1,5 +1,9 @@
+mod field_math;
+
+use crate::field_math::number_to_binary_poly;
+
 fn main() {
     println!("Hello, world!");
     
-    cx-reed-solomon::number_to_binary_poly();
+    number_to_binary_poly();
 }
