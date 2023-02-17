@@ -1,6 +1,13 @@
 pub fn number_to_binary_poly(num: i32) -> String {
-    for (index, ch) in format!("{num:b}").chars().enumerate() {
-        println!("index: {index}, ch: {ch}");
+    let binary_string = format!("{num:b}");
+    println!("binary_string: {binary_string}");
+
+    let b_chars = binary_string.chars();
+    let start_index = b_chars.clone().count();
+    println!("start_index: {start_index}");
+
+    for ch in b_chars {
+        println!("ch: {ch}");
     }
     
     num.to_string()
