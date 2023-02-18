@@ -1,16 +1,35 @@
+pub struct 
+
 pub fn number_to_binary_poly(num: i32) -> String {
     let binary_string = format!("{num:b}");
-    println!("binary_string: {binary_string}");
 
     let b_chars = binary_string.chars();
-    let start_index = b_chars.clone().count();
-    println!("start_index: {start_index}");
+    let max_index = b_chars.clone().count() - 1;
 
-    for ch in b_chars {
-        println!("ch: {ch}");
+    let mut result_str = String::new();
+    let mut last_op = "";
+    for (index, ch) in b_chars.enumerate() {
+        if ch == '0' {
+            continue;
+        } else {
+            result_str.push_str(last_op);
+            last_op = "+";
+            let x_index = max_index - index;
+            if x_index == 0 {
+                result_str.push('1');
+            } else if x_index == 1 {
+                result_str.push('x');
+            } else {
+                result_str.push('x');                
+                result_str.push_str(&(max_index - index).to_string());
+            }
+        }
     }
-    
-    num.to_string()
+
+    result_str
+}
+
+pub fn poly_to_index_coe_pairs(poly: &str) -> {
 }
 
 #[cfg(test)]

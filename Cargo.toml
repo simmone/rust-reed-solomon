@@ -1,5 +1,5 @@
 [package]
-name = "reed_solomon_cx"
+name = "reed-solomon-cx"
 version = "0.1.0"
 edition = "2021"
 
