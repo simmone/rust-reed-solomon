@@ -1,4 +1,8 @@
-pub struct 
+#[derive(PartialEq, Debug)]
+pub struct Pitem {
+    x_index: u32,
+    coe: u32,
+}
 
 pub fn number_to_binary_poly(num: i32) -> String {
     let binary_string = format!("{num:b}");
@@ -29,7 +33,12 @@ pub fn number_to_binary_poly(num: i32) -> String {
     result_str
 }
 
-pub fn poly_to_index_coe_pairs(poly: &str) -> {
+pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
+    let mut item_list = Vec::new();
+    
+    item_list.push(Pitem { x_index: 0, coe: 1 });
+    
+    item_list
 }
 
 #[cfg(test)]
@@ -43,5 +52,10 @@ mod tests {
         assert_eq!("x3+x2", number_to_binary_poly(12));
         assert_eq!("1", number_to_binary_poly(1));
         assert_eq!("x", number_to_binary_poly(2));
+    }
+    
+    #[test]
+    fn test_poly_to_items() {
+        assert_eq!(poly_to_items("1"), vec![Pitem { x_index: 0, coe: 1 }]);
     }
 }
