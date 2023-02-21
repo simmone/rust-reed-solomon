@@ -1,3 +1,5 @@
+use regex::Regex;
+
 #[derive(PartialEq, Debug)]
 pub struct Pitem {
     x_index: u32,
@@ -34,6 +36,12 @@ pub fn number_to_binary_poly(num: i32) -> String {
 }
 
 pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
+    let re = Regex::new(r"\+").unwrap();
+
+    let polys = _poly.split(&re).collect::<Vec<_>>();
+    
+    println!("splited polys:{polys}");
+
     let mut item_list = Vec::new();
     
     item_list.push(Pitem { x_index: 0, coe: 1 });
