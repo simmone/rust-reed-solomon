@@ -36,7 +36,16 @@ pub fn number_to_binary_poly(num: i32) -> String {
 pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
     let polys: Vec<&str> = _poly.split("+").collect();
     
-    println!("splited polys:{:#?}", polys);
+    let mut polys_iter = polys.iter();
+
+    loop {
+        let poly = polys_iter.next();
+        
+        match poly {
+            None => break,
+            Some(p) => println!("poly: {p}"),
+        }
+    }
 
     let mut item_list = Vec::new();
     
