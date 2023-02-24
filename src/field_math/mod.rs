@@ -24,7 +24,7 @@ pub fn number_to_binary_poly(num: i32) -> String {
             } else if x_index == 1 {
                 result_str.push('x');
             } else {
-                result_str.push('x');                
+                result_str.push('x');
                 result_str.push_str(&(max_index - index).to_string());
             }
         }
@@ -35,22 +35,42 @@ pub fn number_to_binary_poly(num: i32) -> String {
 
 pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
     let polys: Vec<&str> = _poly.split("+").collect();
-    
+
     let mut polys_iter = polys.iter();
 
+    let mut item_list = Vec::new();
+
     loop {
-        let poly = polys_iter.next();
-        
-        match poly {
+        match polys_iter.next() {
             None => break,
-            Some(p) => println!("poly: {p}"),
+            Some(p) => {
+                let poly_items: Vec<&str> = p.split("x").collect();
+
+                let poly_iter = poly_items.iter();
+
+                match poly_iter.count() {
+                    1 => item_list.push(Pitem {
+                        x_index: 0,
+                        coe: poly_items[0].parse::<u32>().unwrap(),
+                    }),
+                    2 => item_list.push(Pitem {
+                        x_index: if poly_items[1] == "" {
+                            1
+                        } else {
+                            poly_items[1].parse::<u32>().unwrap()
+                        },
+                        coe: if poly_items[0] == "" {
+                            1
+                        } else {
+                            poly_items[0].parse::<u32>().unwrap()
+                        },
+                    }),
+                    _ => continue,
+                }
+            }
         }
     }
 
-    let mut item_list = Vec::new();
-    
-    item_list.push(Pitem { x_index: 0, coe: 1 });
-    
     item_list
 }
 
@@ -66,9 +86,12 @@ mod tests {
         assert_eq!("1", number_to_binary_poly(1));
         assert_eq!("x", number_to_binary_poly(2));
     }
-    
+
     #[test]
     fn test_poly_to_items() {
         assert_eq!(poly_to_items("1"), vec![Pitem { x_index: 0, coe: 1 }]);
+        assert_eq!(poly_to_items("2"), vec![Pitem { x_index: 0, coe: 2 }]);
+        assert_eq!(poly_to_items("2x"), vec![Pitem { x_index: 1, coe: 2 }]);
+        assert_eq!(poly_to_items("x2"), vec![Pitem { x_index: 2, coe: 1 }]);
     }
 }
