@@ -11,11 +11,9 @@ pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
         match polys_iter.next() {
             None => break,
             Some(p) => {
-                let poly_items: Vec<&str> = p.split("x").collect();
+                let poly_items: Vec<&str> = p.trim().split("x").collect();
 
-                let poly_iter = poly_items.iter();
-
-                match poly_iter.count() {
+                match poly_items.len() {
                     1 => item_list.push(Pitem {
                         x_index: 0,
                         coe: poly_items[0].parse::<u32>().unwrap(),
@@ -37,8 +35,8 @@ pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
             }
         }
     }
-
-    item_list
+    
+    item_list.sort_by(|a, b| b.x_index.cmp(&a.x_index))
 }
 
 #[cfg(test)]
@@ -47,9 +45,40 @@ mod tests {
 
     #[test]
     fn test_poly_to_items() {
-        assert_eq!(poly_to_items("1"), vec![Pitem { x_index: 0, coe: 1 }]);
-        assert_eq!(poly_to_items("2"), vec![Pitem { x_index: 0, coe: 2 }]);
-        assert_eq!(poly_to_items("2x"), vec![Pitem { x_index: 1, coe: 2 }]);
-        assert_eq!(poly_to_items("x2"), vec![Pitem { x_index: 2, coe: 1 }]);
+        assert_eq!(vec![Pitem { x_index: 0, coe: 1 }], poly_to_items("1"));
+        assert_eq!(vec![Pitem { x_index: 0, coe: 2 }], poly_to_items("2"));
+        assert_eq!(vec![Pitem { x_index: 1, coe: 1 }], poly_to_items("x"));
+        assert_eq!(vec![Pitem { x_index: 1, coe: 2 }], poly_to_items("2x"));
+        assert_eq!(vec![Pitem { x_index: 2, coe: 1 }], poly_to_items("x2"));
+        assert_eq!(
+            vec![
+                Pitem { x_index: 4, coe: 1 },
+                Pitem { x_index: 3, coe: 1 },
+                Pitem { x_index: 2, coe: 1 },
+                Pitem { x_index: 1, coe: 1 },
+                Pitem { x_index: 0, coe: 1 }
+            ],
+            poly_to_items("x4+x3+x2+x+1")
+        );
+        assert_eq!(
+            vec![
+                Pitem { x_index: 4, coe: 1 },
+                Pitem { x_index: 3, coe: 1 },
+                Pitem { x_index: 2, coe: 1 },
+                Pitem { x_index: 1, coe: 1 },
+                Pitem { x_index: 0, coe: 1 }
+            ],
+            poly_to_items(" x4 + x3+x2+x+1")
+        );
+        assert_eq!(
+            vec![
+                Pitem { x_index: 4, coe: 1 },
+                Pitem { x_index: 3, coe: 1 },
+                Pitem { x_index: 2, coe: 1 },
+                Pitem { x_index: 1, coe: 1 },
+                Pitem { x_index: 0, coe: 1 }
+            ],
+            poly_to_items("x4+x3+x1+x2+1")
+        );
     }
 }
