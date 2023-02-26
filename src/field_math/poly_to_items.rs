@@ -5,7 +5,7 @@ pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
 
     let mut polys_iter = polys.iter();
 
-    let mut item_list = Vec::new();
+    let mut items = Vec::new();
 
     loop {
         match polys_iter.next() {
@@ -14,11 +14,11 @@ pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
                 let poly_items: Vec<&str> = p.trim().split("x").collect();
 
                 match poly_items.len() {
-                    1 => item_list.push(Pitem {
+                    1 => items.push(Pitem {
                         x_index: 0,
                         coe: poly_items[0].parse::<u32>().unwrap(),
                     }),
-                    2 => item_list.push(Pitem {
+                    2 => items.push(Pitem {
                         x_index: if poly_items[1] == "" {
                             1
                         } else {
@@ -36,9 +36,9 @@ pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
         }
     }
     
-    item_list.sort_by(|a, b| b.x_index.cmp(&a.x_index));
+    items.sort_by(|a, b| b.x_index.cmp(&a.x_index));
 
-    item_list
+    items
 }
 
 #[cfg(test)]
@@ -52,6 +52,7 @@ mod tests {
         assert_eq!(vec![Pitem { x_index: 1, coe: 1 }], poly_to_items("x"));
         assert_eq!(vec![Pitem { x_index: 1, coe: 2 }], poly_to_items("2x"));
         assert_eq!(vec![Pitem { x_index: 2, coe: 1 }], poly_to_items("x2"));
+        assert_eq!(vec![Pitem { x_index: 3, coe: 2 }], poly_to_items("2x3"));
         assert_eq!(
             vec![
                 Pitem { x_index: 4, coe: 1 },
