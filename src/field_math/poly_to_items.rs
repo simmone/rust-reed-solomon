@@ -35,7 +35,7 @@ pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
             }
         }
     }
-    
+
     items.sort_by(|a, b| b.x_index.cmp(&a.x_index));
 
     items

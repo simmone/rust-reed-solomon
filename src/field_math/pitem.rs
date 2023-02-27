@@ -1,4 +1,4 @@
-use std::fmt::{self, Formatter, Display};
+use std::fmt::{self, Display, Formatter};
 
 #[derive(PartialEq, Debug)]
 pub struct Pitem {
@@ -11,17 +11,20 @@ impl Display for Pitem {
         if self.x_index == 0 {
             write!(f, "{}", self.coe)
         } else {
-            write!(f, "{}x{}",
-                   if self.coe == 1 {
-                       String::from("")
-                   } else {
-                       self.coe.to_string()
-                   },
-                   if self.x_index == 1 {
-                       String::from("")
-                   } else {
-                       self.x_index.to_string()
-                   })
+            write!(
+                f,
+                "{}x{}",
+                if self.coe == 1 {
+                    String::from("")
+                } else {
+                    self.coe.to_string()
+                },
+                if self.x_index == 1 {
+                    String::from("")
+                } else {
+                    self.x_index.to_string()
+                }
+            )
         }
     }
 }
