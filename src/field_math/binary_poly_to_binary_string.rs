@@ -1,7 +1,7 @@
 use crate::field_math::poly_to_items::poly_to_items;
 
-pub fn binary_poly_to_binary_string(_poly: &str) -> String {
-    let indexes: Vec<u32> = poly_to_items(_poly)
+pub fn binary_poly_to_binary_string(poly: &str) -> String {
+    let indexes: Vec<u32> = poly_to_items(poly)
         .iter()
         .map(|item| item.x_index)
         .collect();
@@ -16,7 +16,11 @@ pub fn binary_poly_to_binary_string(_poly: &str) -> String {
             if indexes.contains(&loop_index) { 1 } else { 0 }
         );
 
-        if loop_index == 0 { break; } else { loop_index -=1; }
+        if loop_index == 0 {
+            break;
+        } else {
+            loop_index -= 1;
+        }
     }
 
     result
