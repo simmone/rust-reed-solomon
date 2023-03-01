@@ -2,30 +2,32 @@ use std::fmt::Write;
 
 pub fn binary_string_to_binary_poly(binary_str: &str) -> String {
     let mut result = String::from("");
-    
-    let mut binary_chars = binary_str.chars();
-    
-    let mut loop_index = binary_chars.clone().count();
-    
-    let mut last_op = "";
-    
-    loop {
-        loop_index -= 1;
 
-        match binary_chars.next() {
-            None => break,
-            Some('1') => {
-                match loop_index {
+    let mut binary_chars = binary_str.chars();
+
+    let mut loop_index = binary_str.len();
+
+    let mut last_op = "";
+
+    loop {
+        if loop_index == 0 {
+            break;
+        } else {
+            loop_index -= 1;
+
+            match binary_chars.next() {
+                None => break,
+                Some('1') => match loop_index {
                     1 => write!(result, "{}x", last_op).unwrap(),
                     0 => write!(result, "{}1", last_op).unwrap(),
                     _ => write!(result, "{}x{}", last_op, loop_index).unwrap(),
-                }
-            },
-            _ => continue,
-        };
-        
-        last_op = "+";
-    };
+                },
+                _ => continue,
+            };
+
+            last_op = "+";
+        }
+    }
 
     result
 }
@@ -36,8 +38,8 @@ mod tests {
 
     #[test]
     fn test_binary_string_to_binary_poly() {
-        assert_eq!("x6+x5+x4+x1", binary_string_to_binary_poly("1110010"));
-        assert_eq!("x4+x3+x2+x+1", binary_string_to_binary_poly("10011"));
+        assert_eq!("x6+x5+x4+x", binary_string_to_binary_poly("1110010"));
+        assert_eq!("x4+x+1", binary_string_to_binary_poly("10011"));
         assert_eq!("x", binary_string_to_binary_poly("10"));
     }
 }
