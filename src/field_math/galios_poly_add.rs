@@ -1,7 +1,31 @@
 use crate::field_math::pitem::Pitem;
+use crate::field_math::poly_to_items::poly_to_items;
+use crate::field_math::items_to_poly::items_to_poly;
 
-pub fn galios_poly_add(_polys: Vec<&str>) -> String {
-    String::from("")
+use std::collections::HashMap;
+
+pub fn galios_poly_add(polys: Vec<&str>) -> String {
+    let mut combine_hash: HashMap<u32, u32> = HashMap::new();
+    
+    for poly_str in polys {
+        let pitems = poly_to_items(poly_str);
+        
+        for pitem in pitems {
+            if combine_hash.contains_key(&pitem.x_index) {
+                let xor_coe = pitem.coe ^ combine_hash.get(&pitem.x_index).unwrap();
+                
+                if xor_coe == 0 {
+                    combine_hash.remove(&pitem.x_index);
+                } else {
+                    combine_hash.insert(pitem.x_index, xor_coe);
+                }
+            } else {
+                combine_hash.insert(pitem.x_index, pitem.coe);
+            }
+        }
+    }
+
+    items_to_poly(combine_hash.iter().map(|(_x_index, _coe)| Pitem{ x_index: *_x_index, coe: *_coe }).collect())
 }
 
 #[cfg(test)]
@@ -10,7 +34,7 @@ mod tests {
 
     #[test]
     fn test_galios_poly_add() {
-        assert_eq!("", galios_poly_add(vec!["9" "9"]));
+        assert_eq!("", galios_poly_add(vec!["9", "9"]));
         assert_eq!("x+8", galios_poly_add(vec!["x+8"]));
         assert_eq!("x+8", galios_poly_add(vec!["3x1", "2x1+8"]));
         assert_eq!("3x2+2x+13", galios_poly_add(vec!["3x2+2x+8", "5"]));
