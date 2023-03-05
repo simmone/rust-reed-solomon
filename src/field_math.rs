@@ -13,3 +13,5 @@ pub mod binary_string_to_binary_poly;
 pub mod galios_poly_add;
 
 pub mod binary_poly_multiply;
+
+pub mod binary_poly_divide;
