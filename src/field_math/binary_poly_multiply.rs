@@ -13,8 +13,6 @@ pub fn poly_multiply_basic(poly_multiplicand: &str, poly_multiplier: &str, add_o
     
     let mut result_polys: Vec<String> = Vec::new();
 
-    println!("{:?}, {:?}", multiplicand_pitems, multiplier_pitems);
-
     for multiplicand_pitem in &multiplicand_pitems {
 
         let mut result_pitems = Vec::new();
