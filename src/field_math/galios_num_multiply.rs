@@ -1,3 +1,4 @@
+use crate::field_math::global::field_generator_poly;
 use crate::field_math::number_to_binary_poly::number_to_binary_poly;
 use crate::field_math::binary_poly_multiply::binary_poly_multiply;
 use crate::field_math::binary_poly_divide::binary_poly_divide;
