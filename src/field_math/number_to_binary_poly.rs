@@ -1,4 +1,4 @@
-pub fn number_to_binary_poly(num: i32) -> String {
+pub fn number_to_binary_poly(num: u32) -> String {
     let binary_string = format!("{num:b}");
 
     let b_chars = binary_string.chars();
