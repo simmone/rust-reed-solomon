@@ -2,6 +2,7 @@ use crate::field_math::pitem::Pitem;
 use crate::field_math::poly_to_items::poly_to_items;
 use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::galios_poly_add::galios_poly_add;
+use crate::field_math::galios_num_multiply::galios_num_multiply;
 
 pub fn binary_poly_multiply(poly1: &str, poly2: &str) -> String {
     poly_multiply_basic(poly1, poly2, "+",  "*")
