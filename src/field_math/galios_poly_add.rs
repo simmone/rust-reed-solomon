@@ -1,19 +1,19 @@
+use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::pitem::Pitem;
 use crate::field_math::poly_to_items::poly_to_items;
-use crate::field_math::items_to_poly::items_to_poly;
 
 use std::collections::HashMap;
 
 pub fn galios_poly_add(polys: Vec<&str>) -> String {
     let mut combine_hash: HashMap<u32, u32> = HashMap::new();
-    
+
     for poly_str in polys {
         let pitems = poly_to_items(poly_str);
-        
+
         for pitem in pitems {
             if combine_hash.contains_key(&pitem.x_index) {
                 let xor_coe = pitem.coe ^ combine_hash.get(&pitem.x_index).unwrap();
-                
+
                 if xor_coe == 0 {
                     combine_hash.remove(&pitem.x_index);
                 } else {
@@ -25,7 +25,15 @@ pub fn galios_poly_add(polys: Vec<&str>) -> String {
         }
     }
 
-    items_to_poly(combine_hash.iter().map(|(_x_index, _coe)| Pitem{ x_index: *_x_index, coe: *_coe }).collect())
+    items_to_poly(
+        combine_hash
+            .iter()
+            .map(|(_x_index, _coe)| Pitem {
+                x_index: *_x_index,
+                coe: *_coe,
+            })
+            .collect(),
+    )
 }
 
 #[cfg(test)]
