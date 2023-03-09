@@ -2,8 +2,11 @@ use crate::field_math::galios_context::GaliosContext;
 
 use std::collections::HashMap;
 
-pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> HashMap<&str, u32> {
-    let mut index_to_number_hash: HashMap<&str, u32> = HashMap::new();
+pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> HashMap<&str, i32> {
+    let mut index_to_number_hash: HashMap<&str, i32> = HashMap::new();
+    let mut index_to_poly_hash: HashMap<&str, &str> = HashMap::new();
+    
+    let 2m_1 = 2.pow(bit_width) - 1;
     
     index_to_number_hash.insert("0", 0);
     
@@ -22,6 +25,21 @@ mod tests {
         
         let index_to_number_hash = get_galios_index_to_number_hash(4, &gs);
 
-        assert_eq!(0, index_to_number_hash.get("0"));
+        assert_eq!(0, *index_to_number_hash.get("0").unwrap());
+        assert_eq!(1, *index_to_number_hash.get("a0").unwrap());
+        assert_eq!(2, *index_to_number_hash.get("a1").unwrap());
+        assert_eq!(4, *index_to_number_hash.get("a2").unwrap());
+        assert_eq!(8, *index_to_number_hash.get("a3").unwrap());
+        assert_eq!(3, *index_to_number_hash.get("a4").unwrap());
+        assert_eq!(6, *index_to_number_hash.get("a5").unwrap());
+        assert_eq!(12, *index_to_number_hash.get("a6").unwrap());
+        assert_eq!(11, *index_to_number_hash.get("a7").unwrap());
+        assert_eq!(5, *index_to_number_hash.get("a8").unwrap());
+        assert_eq!(10, *index_to_number_hash.get("a9").unwrap());
+        assert_eq!(7, *index_to_number_hash.get("a10").unwrap());
+        assert_eq!(14, *index_to_number_hash.get("a11").unwrap());
+        assert_eq!(15, *index_to_number_hash.get("a12").unwrap());
+        assert_eq!(13, *index_to_number_hash.get("a13").unwrap());
+        assert_eq!(9, *index_to_number_hash.get("a14").unwrap());
     }
 }
