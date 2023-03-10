@@ -5,10 +5,14 @@ use crate::field_math::poly_to_items::poly_to_items;
 use crate::field_math::items_to_poly::items_to_poly;
 
 pub fn poly_remove_dup(poly: &str) -> String {
-    let mut unique_pitem_hash: HashMap<Pitem, &str> = HashMap::new();
+    let mut unique_pitem_hash: HashMap<Pitem, bool> = HashMap::new();
     
     for pitem in poly_to_items(poly) {
-        unique_pitem_hash.insert(pitem, "1");
+        if unique_pitem_hash.contains_key(&pitem) {
+            unique_pitem_hash.remove(&pitem);
+        } else {
+            unique_pitem_hash.insert(pitem, true);
+        }
     }
     
     println!("{:?}", unique_pitem_hash);

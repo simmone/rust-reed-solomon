@@ -25,3 +25,5 @@ pub mod galios_poly_multiply;
 pub mod get_galios_index_to_number_hash;
 
 pub mod poly_remove_dup;
+
+pub mod poly_sum;

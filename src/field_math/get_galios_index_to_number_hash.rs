@@ -2,10 +2,12 @@ use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::poly_to_items::poly_to_items;
 use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::galios_poly_multiply::galios_poly_multiply;
+use crate::field_math::poly_remove_dup::poly_remove_dup;
+use crate::field_math::poly_sum::poly_sum;
 
 use std::collections::HashMap;
 
-pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> HashMap<&str, i32> {
+pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> HashMap<String, u32> {
     println!("bit_width: {bit_width}");
 
     println!("field_generator_poly: {}", gs.field_generator_poly);
@@ -24,33 +26,45 @@ pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> Ha
     
     println!("rest_field_generator_poly: {}", rest_field_generator_poly);
 
-    let mut index_to_number_hash: HashMap<&str, i32> = HashMap::new();
-    let mut index_to_poly_hash: HashMap<&str, &str> = HashMap::new();
+    let mut index_to_number_hash: HashMap<String, u32> = HashMap::new();
+    let mut index_to_poly_hash: HashMap<String, String> = HashMap::new();
     let mut poly_index_list: Vec<String> = Vec::new();
     
-    index_to_number_hash.insert("0", 0);
-    index_to_poly_hash.insert("0", "0");
+    index_to_number_hash.insert(String::from("0"), 0);
+    index_to_poly_hash.insert(String::from("0"), String::from("0"));
     poly_index_list.push(String::from("0"));
+
+    index_to_number_hash.insert(String::from("a0"), 1);
+    index_to_poly_hash.insert(String::from("a0"), String::from("1"));
     poly_index_list.push(String::from("a0"));
 
     println!("calculating each index's field element\n\n");
 
     let mut index = 1;
     
-    let mut last_val = "1";
+    let mut last_val: String = String::from("1");
 
     while index < m2_1 {
-        let mut a_index = format!("a{index}");
+        let a_index = format!("a{index}");
         
         poly_index_list.push(a_index.clone());
         
         println!("a_index: {a_index}");
 
-        let step1 = galios_poly_multiply(vec![last_val, "x"], &gs);
+        let step1 = galios_poly_multiply(vec![&last_val, "x"], &gs);
         println!("step1: galios_poly_multiply(vec![{last_val}, \"x\"], &gs): {step1}");
 
         let step2 = step1.replace(&first_field_generator_poly, &rest_field_generator_poly);
-        println!("step2: replace poly item by field_generator_poly:{step2}");
+        println!("step2: replace poly item by field_generator_poly: {step2}");
+        
+        let step3 = poly_remove_dup(&step2);
+        println!("step3: poly_remove_dup({}): {}", step2, step3);
+        
+        index_to_poly_hash.insert(a_index.clone(), step3.clone());
+
+        index_to_number_hash.insert(a_index.clone(), poly_sum(&step3));
+        
+        last_val = step3.clone();
         
         index = index + 1;
     }
