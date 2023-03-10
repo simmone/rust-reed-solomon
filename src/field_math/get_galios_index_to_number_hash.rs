@@ -1,6 +1,7 @@
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::poly_to_items::poly_to_items;
 use crate::field_math::items_to_poly::items_to_poly;
+use crate::field_math::galios_poly_multiply::galios_poly_multiply;
 
 use std::collections::HashMap;
 
@@ -25,12 +26,12 @@ pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> Ha
 
     let mut index_to_number_hash: HashMap<&str, i32> = HashMap::new();
     let mut index_to_poly_hash: HashMap<&str, &str> = HashMap::new();
-    let mut poly_index_list: Vec<&str> = Vec::new();
+    let mut poly_index_list: Vec<String> = Vec::new();
     
     index_to_number_hash.insert("0", 0);
     index_to_poly_hash.insert("0", "0");
-    poly_index_list.push("0");
-    poly_index_list.push("a0");
+    poly_index_list.push(String::from("0"));
+    poly_index_list.push(String::from("a0"));
 
     println!("calculating each index's field element\n\n");
 
@@ -41,7 +42,15 @@ pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> Ha
     while index < m2_1 {
         let mut a_index = format!("a{index}");
         
+        poly_index_list.push(a_index.clone());
+        
         println!("a_index: {a_index}");
+
+        let step1 = galios_poly_multiply(vec![last_val, "x"], &gs);
+        println!("step1: galios_poly_multiply(vec![{last_val}, \"x\"], &gs): {step1}");
+
+        let step2 = step1.replace(&first_field_generator_poly, &rest_field_generator_poly);
+        println!("step2: replace poly item by field_generator_poly:{step2}");
         
         index = index + 1;
     }
