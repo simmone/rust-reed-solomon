@@ -5,9 +5,6 @@ use crate::field_math::items_to_poly::items_to_poly;
 use std::collections::HashMap;
 
 pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> HashMap<&str, i32> {
-    let mut index_to_number_hash: HashMap<&str, i32> = HashMap::new();
-    let mut index_to_poly_hash: HashMap<&str, &str> = HashMap::new();
-    
     println!("bit_width: {bit_width}");
 
     println!("field_generator_poly: {}", gs.field_generator_poly);
@@ -25,9 +22,29 @@ pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> Ha
     println!("first_field_generator_poly: {}", first_field_generator_poly);
     
     println!("rest_field_generator_poly: {}", rest_field_generator_poly);
+
+    let mut index_to_number_hash: HashMap<&str, i32> = HashMap::new();
+    let mut index_to_poly_hash: HashMap<&str, &str> = HashMap::new();
+    let mut poly_index_list: Vec<&str> = Vec::new();
     
     index_to_number_hash.insert("0", 0);
     index_to_poly_hash.insert("0", "0");
+    poly_index_list.push("0");
+    poly_index_list.push("a0");
+
+    println!("calculating each index's field element\n\n");
+
+    let mut index = 1;
+    
+    let mut last_val = "1";
+
+    while index < m2_1 {
+        let mut a_index = format!("a{index}");
+        
+        println!("a_index: {a_index}");
+        
+        index = index + 1;
+    }
     
     index_to_number_hash
 }
