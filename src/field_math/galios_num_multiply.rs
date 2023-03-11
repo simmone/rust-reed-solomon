@@ -2,6 +2,7 @@ use crate::field_math::binary_poly_divide::binary_poly_divide;
 use crate::field_math::binary_poly_multiply::binary_poly_multiply;
 use crate::field_math::binary_poly_to_binary_string::binary_poly_to_binary_string;
 use crate::field_math::galios_context::GaliosContext;
+use crate::field_math::galios_context::new_gs;
 use crate::field_math::number_to_binary_poly::number_to_binary_poly;
 
 pub fn galios_num_multiply(num1: u32, num2: u32, gs: &GaliosContext) -> u32 {
@@ -31,9 +32,7 @@ mod tests {
 
     #[test]
     fn test_galios_num_multiply() {
-        let gs = GaliosContext {
-            field_generator_poly: String::from("x4+x+1"),
-        };
+        let gs = new_gs("x4+x+1");
 
         assert_eq!(1, galios_num_multiply(10, 12, &gs));
         assert_eq!(11, galios_num_multiply(10, 13, &gs));

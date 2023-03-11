@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
+use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::pitem::Pitem;
 use crate::field_math::poly_to_items::poly_to_items;
-use crate::field_math::items_to_poly::items_to_poly;
 
 pub fn poly_remove_dup(poly: &str) -> String {
     let mut unique_pitem_hash: HashMap<Pitem, bool> = HashMap::new();
-    
+
     for pitem in poly_to_items(poly) {
         if unique_pitem_hash.contains_key(&pitem) {
             unique_pitem_hash.remove(&pitem);
@@ -14,9 +14,9 @@ pub fn poly_remove_dup(poly: &str) -> String {
             unique_pitem_hash.insert(pitem, true);
         }
     }
-    
+
     println!("{:?}", unique_pitem_hash);
-    
+
     items_to_poly(unique_pitem_hash.into_keys().collect())
 }
 

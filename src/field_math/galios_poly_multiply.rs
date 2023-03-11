@@ -1,4 +1,5 @@
 use crate::field_math::galios_context::GaliosContext;
+use crate::field_math::galios_context::new_gs;
 use crate::field_math::galios_num_multiply::galios_num_multiply;
 use crate::field_math::galios_poly_add::galios_poly_add;
 use crate::field_math::items_to_poly::items_to_poly;
@@ -53,9 +54,7 @@ mod tests {
 
     #[test]
     fn test_galios_poly_multiply() {
-        let gs = GaliosContext {
-            field_generator_poly: String::from("x4+x+1"),
-        };
+        let gs = new_gs("x4+x+1");
 
         assert_eq!("x", galios_poly_multiply(vec!["1", "x"], &gs));
         assert_eq!(
