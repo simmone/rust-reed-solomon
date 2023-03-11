@@ -15,8 +15,6 @@ pub fn poly_remove_dup(poly: &str) -> String {
         }
     }
 
-    println!("{:?}", unique_pitem_hash);
-
     items_to_poly(unique_pitem_hash.into_keys().collect())
 }
 

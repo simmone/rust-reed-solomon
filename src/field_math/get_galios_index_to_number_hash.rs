@@ -1,5 +1,5 @@
-use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::galios_context::new_gs;
+use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::galios_poly_multiply::galios_poly_multiply;
 use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::poly_remove_dup::poly_remove_dup;
@@ -8,14 +8,14 @@ use crate::field_math::poly_to_items::poly_to_items;
 
 use std::collections::HashMap;
 
-pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> HashMap<String, u32> {
-    println!("bit_width: {bit_width}");
+pub fn get_galios_index_to_number_hash(gs: &GaliosContext) -> HashMap<String, u32> {
+    //    println!("bit_width: {}", gs.bit_width);
 
-    println!("field_generator_poly: {}", gs.field_generator_poly);
+    //    println!("field_generator_poly: {}", gs.field_generator_poly);
 
-    let m2_1 = 2_u32.pow(bit_width) - 1;
+    let m2_1 = 2_u32.pow(gs.bit_width) - 1;
 
-    println!("m2_1: {m2_1}");
+    //    println!("m2_1: {m2_1}");
 
     let fgp_pitems = poly_to_items(&gs.field_generator_poly);
 
@@ -23,9 +23,9 @@ pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> Ha
 
     let rest_field_generator_poly = items_to_poly(fgp_pitems[1..].to_vec());
 
-    println!("first_field_generator_poly: {}", first_field_generator_poly);
+    //    println!("first_field_generator_poly: {}", first_field_generator_poly);
 
-    println!("rest_field_generator_poly: {}", rest_field_generator_poly);
+    //    println!("rest_field_generator_poly: {}", rest_field_generator_poly);
 
     let mut index_to_number_hash: HashMap<String, u32> = HashMap::new();
     let mut index_to_poly_hash: HashMap<String, String> = HashMap::new();
@@ -39,7 +39,7 @@ pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> Ha
     index_to_poly_hash.insert(String::from("a0"), String::from("1"));
     poly_index_list.push(String::from("a0"));
 
-    println!("calculating each index's field element\n\n");
+    //    println!("calculating each index's field element\n\n");
 
     let mut index = 1;
 
@@ -50,16 +50,16 @@ pub fn get_galios_index_to_number_hash(bit_width: u32, gs: &GaliosContext) -> Ha
 
         poly_index_list.push(a_index.clone());
 
-        println!("a_index: {a_index}");
+        //        println!("a_index: {a_index}");
 
         let step1 = galios_poly_multiply(vec![&last_val, "x"], &gs);
-        println!("step1: galios_poly_multiply(vec![{last_val}, \"x\"], &gs): {step1}");
+        //        println!("step1: galios_poly_multiply(vec![{last_val}, \"x\"], &gs): {step1}");
 
         let step2 = step1.replace(&first_field_generator_poly, &rest_field_generator_poly);
-        println!("step2: replace poly item by field_generator_poly: {step2}");
+        //        println!("step2: replace poly item by field_generator_poly: {step2}");
 
         let step3 = poly_remove_dup(&step2);
-        println!("step3: poly_remove_dup({}): {}", step2, step3);
+        //        println!("step3: poly_remove_dup({}): {}", step2, step3);
 
         index_to_poly_hash.insert(a_index.clone(), step3.clone());
 
@@ -79,8 +79,8 @@ mod tests {
 
     #[test]
     fn test_galios_index_to_number_hash_4() {
-        let mut gs = new_gs("x4+x+1");
-        gs.galios_index_to_number_hash = get_galios_index_to_number_hash(4, &gs);
+        let mut gs = new_gs(4, "x4+x+1");
+        gs.galios_index_to_number_hash = get_galios_index_to_number_hash(&gs);
 
         assert_eq!(0, *gs.galios_index_to_number_hash.get("0").unwrap());
         assert_eq!(1, *gs.galios_index_to_number_hash.get("a0").unwrap());
@@ -102,9 +102,8 @@ mod tests {
 
     #[test]
     fn test_galios_index_to_number_hash_8() {
-        let mut gs = new_gs("x8+x4+x3+x2+1");
-
-        gs.galios_index_to_number_hash = get_galios_index_to_number_hash(8, &gs);
+        let mut gs = new_gs(8, "x8+x4+x3+x2+1");
+        gs.galios_index_to_number_hash = get_galios_index_to_number_hash(&gs);
 
         assert_eq!(0, *gs.galios_index_to_number_hash.get("0").unwrap());
         assert_eq!(1, *gs.galios_index_to_number_hash.get("a0").unwrap());
