@@ -1,7 +1,6 @@
 use crate::field_math::galios_context::new_gs;
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::galios_poly_multiply::galios_poly_multiply;
-use crate::field_math::get_galios_index_to_number_hash::get_galios_index_to_number_hash;
 
 pub fn get_code_generator_poly(parity_length: u32, gs: &GaliosContext) -> String {
     let mut polys: Vec<String> = Vec::new();
@@ -23,7 +22,7 @@ pub fn get_code_generator_poly(parity_length: u32, gs: &GaliosContext) -> String
         loop_index += 1;
     }
 
-    galios_poly_multiply(polys.iter().map(|poly| poly.as_str()).collect(), gs)
+    galios_poly_multiply(polys.iter().map(|poly| poly.as_str()).collect(), &gs.field_generator_poly)
 }
 
 #[cfg(test)]
@@ -32,16 +31,14 @@ mod tests {
 
     #[test]
     fn test_get_code_generator_poly_4() {
-        let mut gs = new_gs(4, "x4+x+1");
-        gs.galios_index_to_number_hash = get_galios_index_to_number_hash(&gs);
+        let gs = new_gs(4, "x4+x+1");
 
         assert_eq!("x4+15x3+3x2+x+12", get_code_generator_poly(4, &gs));
     }
 
     #[test]
     fn test_get_code_generator_poly_8() {
-        let mut gs = new_gs(8, "x8+x4+x3+x2+1");
-        gs.galios_index_to_number_hash = get_galios_index_to_number_hash(&gs);
+        let gs = new_gs(8, "x8+x4+x3+x2+1");
 
         assert_eq!("x16+59x15+13x14+104x13+189x12+68x11+209x10+30x9+8x8+163x7+65x6+41x5+229x4+98x3+50x2+36x+59",
                    get_code_generator_poly(16, &gs));
