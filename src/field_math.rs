@@ -27,3 +27,5 @@ pub mod poly_remove_dup;
 pub mod poly_sum;
 
 pub mod get_code_generator_poly;
+
+pub mod galios_poly_divide_align;
