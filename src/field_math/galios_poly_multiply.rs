@@ -26,7 +26,7 @@ pub fn galios_poly_multiply(polys: Vec<&str>, field_generator_poly: &str) -> Str
                             coe: galios_num_multiply(
                                 multiplier_pitem.coe,
                                 multiplicand_pitem.coe,
-                                field_generator_poly
+                                field_generator_poly,
                             ),
                         });
                     }
@@ -57,9 +57,18 @@ mod tests {
             "x6+x5+x4+x",
             galios_poly_multiply(vec!["x3+x", "x3+x2+1"], "x4+x+1")
         );
-        assert_eq!("x3+x2+x", galios_poly_multiply(vec!["x2+x1+1", "x"], "x4+x+1"));
-        assert_eq!("x4+x3+x2", galios_poly_multiply(vec!["x2+x1+1", "x2"], "x4+x+1"));
-        assert_eq!("x2+3x+2", galios_poly_multiply(vec!["x+1", "x+2"], "x4+x+1"));
+        assert_eq!(
+            "x3+x2+x",
+            galios_poly_multiply(vec!["x2+x1+1", "x"], "x4+x+1")
+        );
+        assert_eq!(
+            "x4+x3+x2",
+            galios_poly_multiply(vec!["x2+x1+1", "x2"], "x4+x+1")
+        );
+        assert_eq!(
+            "x2+3x+2",
+            galios_poly_multiply(vec!["x+1", "x+2"], "x4+x+1")
+        );
         assert_eq!(
             "x3+7x2+14x+8",
             galios_poly_multiply(vec!["x2+3x+2", "x+4"], "x4+x+1")

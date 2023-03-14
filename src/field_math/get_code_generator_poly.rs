@@ -22,7 +22,10 @@ pub fn get_code_generator_poly(parity_length: u32, gs: &GaliosContext) -> String
         loop_index += 1;
     }
 
-    galios_poly_multiply(polys.iter().map(|poly| poly.as_str()).collect(), &gs.field_generator_poly)
+    galios_poly_multiply(
+        polys.iter().map(|poly| poly.as_str()).collect(),
+        &gs.field_generator_poly,
+    )
 }
 
 #[cfg(test)]

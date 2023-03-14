@@ -1,52 +1,56 @@
 use crate::field_math::galios_context::new_gs;
 use crate::field_math::galios_context::GaliosContext;
-use crate::field_math::poly_to_items::poly_to_items;
 use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::pitem::Pitem;
+use crate::field_math::poly_to_items::poly_to_items;
 
 use std::str::FromStr;
 
-pub fn galios_poly_divide_align(dividend_poly: &str, divisor_poly: &str, gs: &GaliosContext) -> String {
+pub fn galios_poly_divide_align(
+    dividend_poly: &str,
+    divisor_poly: &str,
+    gs: &GaliosContext,
+) -> String {
     let dividend_pitems = poly_to_items(dividend_poly);
-    
+
     let divisor_pitems = poly_to_items(divisor_poly);
 
     let src_coe_n = divisor_pitems[0].coe;
 
     let src_index_n = divisor_pitems[0].x_index;
-    
+
     let src_coe_a = gs.galios_number_to_index_hash.get(&src_coe_n).unwrap();
-    
+
     let src_coe_a_n = u32::from_str(&src_coe_a[1..]).unwrap();
-    
-//    println!("src_coe_a: [{src_coe_a}][{src_coe_a_n}]");
+
+    //    println!("src_coe_a: [{src_coe_a}][{src_coe_a_n}]");
 
     let dst_coe_n = dividend_pitems[0].coe;
 
     let dst_index_n = dividend_pitems[0].x_index;
 
     let dst_coe_a = gs.galios_number_to_index_hash.get(&dst_coe_n).unwrap();
-    
+
     let dst_coe_a_n = u32::from_str(&dst_coe_a[1..]).unwrap();
-    
-//    println!("dst_coe_a: [{dst_coe_a}][{dst_coe_a_n}]");
+
+    //    println!("dst_coe_a: [{dst_coe_a}][{dst_coe_a_n}]");
 
     let m2_1 = 2_u32.pow(gs.bit_width) - 1;
 
     let step1 = m2_1 + dst_coe_a_n - src_coe_a_n;
 
-//    println!("m2_1 + dst_coe_a_n - src_coe_a_n = {step1}");
-    
+    //    println!("m2_1 + dst_coe_a_n - src_coe_a_n = {step1}");
+
     let step2 = step1 % m2_1;
 
-//    println!("step1 % {m2_1} = {step2}");
-    
+    //    println!("step1 % {m2_1} = {step2}");
+
     let step2_a = format!("a{step2}");
-    
+
     let step3 = gs.galios_index_to_number_hash.get(&step2_a).unwrap();
 
-//    println!("gs.galios_index_to_number_hash.get(&{step2_a}) = {step3}");
-    
+    //    println!("gs.galios_index_to_number_hash.get(&{step2_a}) = {step3}");
+
     let pitem = Pitem {
         x_index: dst_index_n - src_index_n,
         coe: *step3,

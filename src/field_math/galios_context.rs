@@ -26,10 +26,12 @@ impl Display for GaliosContext {
 }
 
 pub fn new_gs(bit_width: u32, fgp: &str) -> GaliosContext {
-
     let _galios_index_to_number_hash = get_galios_index_to_number_hash(bit_width, fgp);
 
-    let _galios_number_to_index_hash = _galios_index_to_number_hash.iter().map(|(k, v)| (*v, k.clone())).collect();
+    let _galios_number_to_index_hash = _galios_index_to_number_hash
+        .iter()
+        .map(|(k, v)| (*v, k.clone()))
+        .collect();
 
     GaliosContext {
         bit_width,
@@ -39,7 +41,10 @@ pub fn new_gs(bit_width: u32, fgp: &str) -> GaliosContext {
     }
 }
 
-pub fn get_galios_index_to_number_hash(bit_width: u32, field_generator_poly: &str) -> HashMap<String, u32> {
+pub fn get_galios_index_to_number_hash(
+    bit_width: u32,
+    field_generator_poly: &str,
+) -> HashMap<String, u32> {
     //    println!("bit_width: {}", gs.bit_width);
 
     //    println!("field_generator_poly: {}", gs.field_generator_poly);

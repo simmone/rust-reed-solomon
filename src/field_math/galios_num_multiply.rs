@@ -13,8 +13,7 @@ pub fn galios_num_multiply(num1: u32, num2: u32, field_generator_poly: &str) -> 
 
         let binary_multiplied = binary_poly_multiply(&num1_binary_poly, &num2_binary_poly);
 
-        let divide_field_generator =
-            binary_poly_divide(&binary_multiplied, field_generator_poly);
+        let divide_field_generator = binary_poly_divide(&binary_multiplied, field_generator_poly);
 
         let binary_str = binary_poly_to_binary_string(&divide_field_generator);
 
