@@ -1,10 +1,10 @@
 use crate::field_math::galios_context::new_gs;
 use crate::field_math::galios_context::GaliosContext;
-use crate::field_math::poly_to_items::poly_to_items;
-use crate::field_math::items_to_poly::items_to_poly;
+use crate::field_math::galios_poly_add::galios_poly_add;
 use crate::field_math::galios_poly_divide_align::galios_poly_divide_align;
 use crate::field_math::galios_poly_multiply::galios_poly_multiply;
-use crate::field_math::galios_poly_add::galios_poly_add;
+use crate::field_math::items_to_poly::items_to_poly;
+use crate::field_math::poly_to_items::poly_to_items;
 
 pub fn galios_poly_divide(
     dividend_poly: &str,
@@ -15,56 +15,60 @@ pub fn galios_poly_divide(
 
     let divisor_index = divisor_pitems[0].x_index;
 
-//    println!("divisor_index: {divisor_index}");
-    
+    //    println!("divisor_index: {divisor_index}");
+
     let mut remainder = String::from(dividend_poly);
-    
+
     let mut quotient = String::from("");
-    
+
     let mut last_op = String::from("");
-    
+
     loop {
-//        println!("remainder: {remainder}");
-        
+        //        println!("remainder: {remainder}");
+
         if remainder != "" {
             let remainder_pitems = poly_to_items(&remainder);
-            
+
             let remainder_index = remainder_pitems[0].x_index;
-            
+
             let remainder_coe = remainder_pitems[0].coe;
 
-//            println!("remainder_index: {remainder_index}, remainder_coe: {remainder_coe}");
-            
+            //            println!("remainder_index: {remainder_index}, remainder_coe: {remainder_coe}");
+
             if remainder_coe == 0 {
                 remainder = items_to_poly(remainder_pitems[0..].to_vec());
 
                 continue;
             } else {
                 if remainder_index >= divisor_index {
-//                    println!("remainder: {remainder}, divisor: {divisor_poly}");
-            
+                    //                    println!("remainder: {remainder}, divisor: {divisor_poly}");
+
                     let loop_align_factor = galios_poly_divide_align(&remainder, divisor_poly, gs);
-//                    println!("loop_align_factor: {loop_align_factor}");
+                    //                    println!("loop_align_factor: {loop_align_factor}");
 
-                    let loop_divisor_multiply_factor = galios_poly_multiply(vec![divisor_poly, &loop_align_factor], &gs.field_generator_poly);
-//                    println!("loop_divisor_multiply_factor: {loop_divisor_multiply_factor}");
+                    let loop_divisor_multiply_factor = galios_poly_multiply(
+                        vec![divisor_poly, &loop_align_factor],
+                        &gs.field_generator_poly,
+                    );
+                    //                    println!("loop_divisor_multiply_factor: {loop_divisor_multiply_factor}");
 
-                    let loop_substract = galios_poly_add(vec![&remainder, &loop_divisor_multiply_factor]);
-//                    println!("loop_substract: {loop_substract}");
-            
+                    let loop_substract =
+                        galios_poly_add(vec![&remainder, &loop_divisor_multiply_factor]);
+                    //                    println!("loop_substract: {loop_substract}");
+
                     remainder = loop_substract;
-            
+
                     quotient = format!("{quotient}{last_op}{loop_align_factor}");
 
                     last_op = "+".to_string();
-            
+
                     continue;
                 } else {
-                    break (quotient, remainder)
+                    break (quotient, remainder);
                 }
             }
         } else {
-            break (quotient, remainder)
+            break (quotient, remainder);
         }
     }
 }
