@@ -1,4 +1,3 @@
-use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::galios_context::new_gs;
 use crate::primitive_poly_table::get_field_generator_poly_by_value;
 use crate::field_math::get_code_generator_poly::get_code_generator_poly;
@@ -7,8 +6,8 @@ use crate::field_math::galios_num_multiply::galios_num_multiply;
 
 pub fn rs_encode(
     data_list: Vec<u32>,
-    parity_length: u32,
     bit_width: u32,
+    parity_length: u32,
     primitive_poly_value: u64,
 ) -> Vec<u32> {
     println!("data_list: {:?}", data_list);
@@ -37,12 +36,12 @@ pub fn rs_encode(
 
     println!("poly divide start");
     
-    let mut count = 1;
+    let mut loop_count = 1;
 
     let mut loop_dividend_list = loop_remainder_list.split_off(parity_length.try_into().unwrap());
     
     loop {
-        println!("loop start");
+        println!("loop start[{loop_count}]");
         
         println!("loop_dividend_list: {:?}", loop_dividend_list);
 
@@ -53,18 +52,39 @@ pub fn rs_encode(
             println!("step1: remainder list + first item of rest dividend list = {:?} as dividend",
                      appended_dividend_list);
 
+            let first_loop_remainder_item = *appended_dividend_list.get(0).unwrap();
             let aligned_code_generator_list: Vec<u32> =
-                coefficient_list.iter().map(|&v| galios_num_multiply(v, *appended_dividend_list.get(0).unwrap(), &gs.field_generator_poly)).collect();
+                coefficient_list.iter().map(|&v| galios_num_multiply(v, first_loop_remainder_item, &gs.field_generator_poly)).collect();
+            println!("step2: coefficient_list * loop_remainder_list's first item = {:?} * {} = {:?}",
+                     coefficient_list,
+                     first_loop_remainder_item,
+                     aligned_code_generator_list);
+            
+            let mut remainder_list: Vec<u32> = Vec::new();
+            let mut appended_dividend_list_iter = appended_dividend_list.iter();
+            let mut aligned_code_generator_list_iter = aligned_code_generator_list.iter();
+            loop {
+                match appended_dividend_list_iter.next() {
+                    Some(item) => {
+                        remainder_list.push(item ^ aligned_code_generator_list_iter.next().unwrap());
+                    },
+                    None => break,
+                }
+            }
 
-            println!("step2: code_generator_list * dividend_list's first item = {:?}", aligned_code_generator_list);
+            println!("step3: appended_dividend_list bitwise-xor aligned_code_generator = {:?}", remainder_list);
+            
+            loop_count += 1;
+            
+            loop_dividend_list = loop_dividend_list[1..].to_vec();
+            
+            loop_remainder_list = remainder_list[1..].to_vec();
 
-            break;
+            println!("loop end");
         } else {
-            break;
+            break loop_remainder_list
         }
     }
-    
-    Vec::new()
 }
 
 #[cfg(test)]
