@@ -4,8 +4,14 @@ use crate::field_math::get_code_generator_poly::get_code_generator_poly;
 use crate::field_math::poly_to_items::poly_to_items;
 use crate::primitive_poly_table::get_field_generator_poly_by_value;
 
-pub fn rs_encode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
-    rs_encode_common(data_list, 8, parity_length, 285)
+pub fn rs_encode(data_list: Vec<u8>, parity_length: u32) -> Vec<u32> {
+    rs_encode_common(data_list.iter().map(|i| u32::from(*i)).collect(), 8, parity_length, 285)
+}
+
+pub fn rs_encode_str(data_str: &str, parity_length: u32) -> &str {
+    let encoded_vec = rs_encode(data_str.bytes().collect(), parity_length);
+
+    std::str::from_utf8(encoded_vec.iter().map(|i| *i as u8).collect()).unwrap()
 }
 
 pub fn rs_encode_common(
@@ -119,6 +125,11 @@ mod tests {
             vec![3, 3, 12, 12],
             rs_encode_common(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 4, 4, 19)
         );
+
+        assert_eq!(
+            vec![15, 11, 11, 0, 15],
+            rs_encode_common(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 4, 5, 19)
+        );
     }
     
     #[test]
@@ -126,6 +137,24 @@ mod tests {
         assert_eq!(
             vec![196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
             rs_encode(vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17], 10)
+        );
+        
+        assert_eq!(
+            vec![168, 72, 22, 82, 217, 54, 156, 0, 46, 15, 180, 122, 16],
+            rs_encode(vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236], 13)
+        );
+
+        assert_eq!(
+            vec![0, 154, 220, 253, 68, 10, 124, 102, 201, 53, 167, 140, 96, 91, 50, 66],
+            rs_encode(vec![35, 37, 245, 131, 35, 83, 116, 84, 83], 16)
+        );
+    }
+    
+    #[test]
+    fn test_rs_encode_str() {
+        assert_eq!(
+            "ss",
+            rs_encode_str("Chen Xiao is just a programmer.", 10)
         );
     }
 }
