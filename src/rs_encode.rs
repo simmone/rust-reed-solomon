@@ -8,10 +8,16 @@ pub fn rs_encode(data_list: Vec<u8>, parity_length: u32) -> Vec<u32> {
     rs_encode_common(data_list.iter().map(|i| u32::from(*i)).collect(), 8, parity_length, 285)
 }
 
-pub fn rs_encode_str(data_str: &str, parity_length: u32) -> &str {
+pub fn rs_encode_str(data_str: &str, parity_length: u32) -> String {
     let encoded_vec = rs_encode(data_str.bytes().collect(), parity_length);
+    
+    let to_u32_strs: Vec<String> = encoded_vec.iter().map(|i| i.to_string()).collect();
+    
+    println!("to_u32_strs: {:?}", to_u32_strs);
+    
+    let to_u8: Vec<u8> = to_u32_strs.iter().map(|i| i.parse().unwrap()).collect();
 
-    std::str::from_utf8(encoded_vec.iter().map(|i| *i as u8).collect()).unwrap()
+    std::str::from_utf8(&to_u8).unwrap().to_string()
 }
 
 pub fn rs_encode_common(
