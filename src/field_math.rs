@@ -31,3 +31,5 @@ pub mod get_code_generator_poly;
 pub mod galios_poly_divide_align;
 
 pub mod galios_poly_divide;
+
+pub mod primitive_poly_table;

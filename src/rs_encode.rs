@@ -1,8 +1,7 @@
-use crate::field_math::galios_context::new_gs;
+use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_num_multiply::galios_num_multiply;
 use crate::field_math::get_code_generator_poly::get_code_generator_poly;
 use crate::field_math::poly_to_items::poly_to_items;
-use crate::primitive_poly_table::get_field_generator_poly_by_value;
 
 pub fn rs_encode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
     rs_encode_common(data_list, 8, parity_length, 285)
@@ -27,11 +26,7 @@ pub fn rs_encode_common(
 
     // println!("bit_width: {bit_width}");
 
-    let field_generator_poly = get_field_generator_poly_by_value(primitive_poly_value);
-
-    // println!("field_generator_poly: {field_generator_poly}");
-
-    let gs = new_gs(bit_width, field_generator_poly);
+    let gs = new_gs_from_value(bit_width, primitive_poly_value);
 
     let code_generator_poly = get_code_generator_poly(parity_length, &gs);
 

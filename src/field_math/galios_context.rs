@@ -6,6 +6,7 @@ use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::poly_remove_dup::poly_remove_dup;
 use crate::field_math::poly_sum::poly_sum;
 use crate::field_math::poly_to_items::poly_to_items;
+use crate::field_math::primitive_poly_table::get_field_generator_poly_by_value;
 
 #[derive(PartialEq, Debug)]
 pub struct GaliosContext {
@@ -25,7 +26,13 @@ impl Display for GaliosContext {
     }
 }
 
-pub fn new_gs(bit_width: u32, fgp: &str) -> GaliosContext {
+pub fn new_gs_from_value(bit_width: u32, primitive_poly_value: u64) -> GaliosContext {
+    let field_generator_poly = get_field_generator_poly_by_value(primitive_poly_value);
+
+    new_gs_from_poly(bit_width, field_generator_poly)
+}
+
+pub fn new_gs_from_poly(bit_width: u32, fgp: &str) -> GaliosContext {
     let _galios_index_to_number_hash = get_galios_index_to_number_hash(bit_width, fgp);
 
     let _galios_number_to_index_hash = _galios_index_to_number_hash

@@ -1,4 +1,4 @@
-use crate::field_math::galios_context::new_gs;
+use crate::field_math::galios_context::new_gs_from_poly;
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::pitem::Pitem;
@@ -65,7 +65,7 @@ mod tests {
 
     #[test]
     fn test_galios_poly_divide_align_4() {
-        let gs = new_gs(4, "x4+x+1");
+        let gs = new_gs_from_poly(4, "x4+x+1");
 
         assert_eq!("10x", galios_poly_divide_align("x4", "12x3", &gs));
         assert_eq!("6", galios_poly_divide_align("14x3", "12x3", &gs));
@@ -76,7 +76,7 @@ mod tests {
 
     #[test]
     fn test_galios_poly_divide_align_8() {
-        let gs = new_gs(8, "x8+x4+x3+x2+1");
+        let gs = new_gs_from_poly(8, "x8+x4+x3+x2+1");
 
         assert_eq!(
             "137x2",

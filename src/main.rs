@@ -1,5 +1,5 @@
 mod field_math;
 
-mod primitive_poly_table;
-
 mod rs_encode;
+
+mod rs_decode;
