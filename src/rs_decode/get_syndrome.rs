@@ -6,11 +6,30 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
 
     let mut result_list: Vec<u32> = vec![];
 
-    loop {
+    'main: loop {
         println!("result_list: {:?}", result_list);
+        
+        let ax = format!("a{loop_parity_index}");
+        
+        println!("ax: {ax}");
 
-        break;
-    }
+        let ax_val = gs.galios_index_to_number_hash.get(&ax).unwrap();
+        
+        println!("ax_val: {ax_val}");
+        
+        if loop_parity_index < parity_length {
+            loop_parity_index += 1;
+            let mut loop_data_iter = data_list.iter();
+            let mut last_result: u32 = 0;
+            let mut last_xor_result: u32 = 0;
+            'step: loop {
+                
+            }
+            continue 'main;
+        } else {
+            break 'main;
+        }
+    } 
 
     vec![0]
 }
