@@ -9,15 +9,15 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
 
     'main: loop {
         println!("result_list: {:?}", result_list);
-        
+
         let ax = format!("a{loop_parity_index}");
-        
+
         println!("ax: {ax}");
 
         let ax_val = gs.galios_index_to_number_hash.get(&ax).unwrap();
-        
+
         println!("ax_val: {ax_val}");
-        
+
         if loop_parity_index < parity_length {
             loop_parity_index += 1;
             let mut loop_data_iter = data_list.iter();
@@ -27,18 +27,17 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
                 match loop_data_iter.next() {
                     Some(i) => {
                         last_xor_result = i ^ last_result;
-                        
-                        let ax_multiply = galios_num_multiply(last_xor_result, *ax_val, &gs.field_generator_poly);
 
-                        println!("{0: >3} ^ {1: <3} = {2: <3} galios_num_multiply {3: <3} = {4: <4}",
-                                 last_result,
-                                 i,
-                                 last_xor_result,
-                                 ax_val,
-                                 ax_multiply);
+                        let ax_multiply =
+                            galios_num_multiply(last_xor_result, *ax_val, &gs.field_generator_poly);
+
+                        println!(
+                            "{0: >3} ^ {1: <3} = {2: <3} galios_num_multiply {3: <3} = {4: <4}",
+                            last_result, i, last_xor_result, ax_val, ax_multiply
+                        );
                         last_result = ax_multiply;
                         continue 'step;
-                    },
+                    }
                     None => break 'step,
                 }
             }
@@ -47,11 +46,14 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
         } else {
             break 'main;
         }
-    } 
+    }
 
     result_list.reverse();
-    
-    result_list
+
+    match result_list.strip_prefix(&[0]) {
+        Some(striped_result) => striped_result.to_vec(),
+        None => result_list,
+    }
 }
 
 #[cfg(test)]
@@ -59,7 +61,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_get_syndrome() {
+    fn test_get_syndrome4() {
         let gs = new_gs_from_value(4, 19);
 
         assert_eq!(
@@ -79,5 +81,44 @@ mod tests {
                 &gs
             )
         );
+    }
+
+    #[test]
+    fn test_get_syndrome8() {
+        let gs = new_gs_from_value(8, 285);
+
+        assert_eq!(
+            vec![127, 213, 228, 134, 89, 149, 113, 122, 131, 7],
+            get_syndrome(
+                vec![
+                    32, 91, 10, 121, 209, 114, 220, 77, 67, 64, 236, 16, 235, 17, 236, 17, 196, 35,
+                    39, 119, 235, 215, 231, 226, 93, 22
+                ],
+                10,
+                &gs
+            )
+        );
+
+        assert_eq!(
+            vec![238, 78, 236, 177, 145, 43, 66, 173, 243, 171, 61, 129, 94, 102, 22, 92],
+            get_syndrome(
+                vec![
+                    248, 146, 101, 20, 154, 230, 111, 233, 94, 213, 1, 93, 180, 149, 155, 81, 253,
+                    215, 246, 143, 121, 234, 121, 19, 172, 146, 19, 15, 170, 25, 3, 93, 89, 58, 63,
+                    51, 156, 203, 103, 230, 157, 102, 132, 246, 74, 75, 14, 50, 50, 125, 148, 194,
+                    1, 144, 15, 98, 36, 222, 214, 1, 242, 232, 68, 48, 254, 100, 102, 143, 142,
+                    194, 199, 92, 140, 18, 93, 43, 230, 28, 206, 110, 194, 76, 135, 0, 21, 105,
+                    163, 172, 251, 99, 243, 175, 68, 158, 186, 81, 17, 106, 173, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                ],
+                16,
+                &gs
+            )
+        )
     }
 }
