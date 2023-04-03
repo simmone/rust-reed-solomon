@@ -3,6 +3,9 @@ use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::galios_num_multiply::galios_num_multiply;
 use crate::field_math::items_to_poly::items_to_poly;
 use crate::field_math::pitem::Pitem;
+use crate::field_math::galios_poly_divide::galios_poly_divide;
+use crate::field_math::galios_poly_multiply::galios_poly_multiply;
+use crate::field_math::galios_poly_add::galios_poly_add;
 
 pub fn error_locator(
     syndromes: Vec<u32>,
@@ -20,12 +23,40 @@ pub fn error_locator(
         })
         .collect();
 
-    let syndromes_poly = items_to_poly(syndromes_items.clone());
+    let syndrome_poly = items_to_poly(syndromes_items.clone());
 
     println!(
-        "syndromes_items: {:?}, syndromes_poly: {syndromes_poly}",
+        "syndromes_items: {:?}, syndrome_poly: {syndrome_poly}",
         syndromes_items
     );
+    
+    let mut loop_dividend = format!("x{}", error_length * 2);
+    
+    let mut loop_divisor = syndrome_poly;
+    
+    let mut loop_add_factor = String::from("0");
+    
+    let mut loop_multiply_factor = String::from("1");
+    
+    let mut loop_result = String::from("");
+    
+    loop {
+        println!("loop_dividend: {loop_dividend}");
+        println!("loop_divisor: {loop_divisor}");
+        println!("loop_add_factor: {loop_add_factor}");
+        println!("loop_multiply_factor: {loop_multiply_factor}");
+        
+        let (quotient, remainder) = galios_poly_divide(&loop_dividend, &loop_divisor, gs);
+        println!("galios_poly_divide({loop_dividend}, {loop_divisor}) = ({quotient} {remainder})");
+        
+        let multiply_result = galios_poly_multiply(vec![&quotient, &loop_multiply_factor], &gs.field_generator_poly);
+        println!("galios_poly_multiply({quotient}, loop_multiply_factor) = {multiply_result}");
+
+        loop_result = galios_poly_add(vec![&loop_add_factor, &multiply_result]);
+        println!("loop_result = galios_poly_add({loop_add_factor}, {multiply_result}) = {loop_result}");
+
+        break;
+    }
 
     Ok(("".to_string(), "".to_string()))
 }
