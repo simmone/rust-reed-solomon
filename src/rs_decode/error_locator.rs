@@ -40,7 +40,9 @@ pub fn error_locator(
     let mut loop_multiply_factor = String::from("1");
     
     let mut loop_result = String::from("");
-    
+
+    let result = Ok("".to_string(), "".to_string());
+
     loop {
         println!("loop_dividend: {loop_dividend}");
         println!("loop_divisor: {loop_divisor}");
@@ -72,7 +74,11 @@ pub fn error_locator(
             let last_index = result_items_last_item.x_index;
             
             if last_index != 0 {
-            break;
+                result = Err(false);
+                break;
+            } else {
+                break;
+            }
         }
     }
 
