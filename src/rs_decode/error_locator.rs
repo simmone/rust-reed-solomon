@@ -6,6 +6,7 @@ use crate::field_math::pitem::Pitem;
 use crate::field_math::galios_poly_divide::galios_poly_divide;
 use crate::field_math::galios_poly_multiply::galios_poly_multiply;
 use crate::field_math::galios_poly_add::galios_poly_add;
+use crate::field_math::poly_to_items::poly_to_items;
 
 pub fn error_locator(
     syndromes: Vec<u32>,
@@ -54,8 +55,25 @@ pub fn error_locator(
 
         loop_result = galios_poly_add(vec![&loop_add_factor, &multiply_result]);
         println!("loop_result = galios_poly_add({loop_add_factor}, {multiply_result}) = {loop_result}");
-
-        break;
+        
+        let remainder_items = poly_to_items(&remainder);
+        
+        let remainder_first_item = remainder_items.first().unwrap();
+        
+        if remainder_first_item.x_index >= error_length {
+            loop_dividend = loop_divisor;
+            loop_divisor = remainder;
+            loop_add_factor = loop_multiply_factor;
+            loop_multiply_factor = loop_result;
+        } else {
+            let result_items = poly_to_items(&loop_result);
+            let result_items_last_item = result_items.last();
+            let last_coe = result_items_last_item.coe;
+            let last_index = result_items_last_item.x_index;
+            
+            if last_index != 0 {
+            break;
+        }
     }
 
     Ok(("".to_string(), "".to_string()))
