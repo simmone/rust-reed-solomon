@@ -15,7 +15,7 @@ pub fn galios_poly_divide(
 
     let divisor_index = divisor_pitems[0].x_index;
 
-    //    println!("divisor_index: {divisor_index}");
+    // println!("divisor_index: {divisor_index}");
 
     let mut remainder = String::from(dividend_poly);
 
@@ -24,7 +24,7 @@ pub fn galios_poly_divide(
     let mut last_op = String::from("");
 
     loop {
-        //        println!("remainder: {remainder}");
+        // println!("remainder: {remainder}");
 
         if remainder != "" {
             let remainder_pitems = poly_to_items(&remainder);
@@ -33,28 +33,28 @@ pub fn galios_poly_divide(
 
             let remainder_coe = remainder_pitems[0].coe;
 
-            //            println!("remainder_index: {remainder_index}, remainder_coe: {remainder_coe}");
+            // println!("remainder_index: {remainder_index}, remainder_coe: {remainder_coe}");
 
             if remainder_coe == 0 {
-                remainder = items_to_poly(remainder_pitems[0..].to_vec());
+                remainder = items_to_poly(remainder_pitems[1..].to_vec());
 
                 continue;
             } else {
                 if remainder_index >= divisor_index {
-                    //                    println!("remainder: {remainder}, divisor: {divisor_poly}");
+                    // println!("remainder: {remainder}, divisor: {divisor_poly}");
 
                     let loop_align_factor = galios_poly_divide_align(&remainder, divisor_poly, gs);
-                    //                    println!("loop_align_factor: {loop_align_factor}");
+                    // println!("loop_align_factor: {loop_align_factor}");
 
                     let loop_divisor_multiply_factor = galios_poly_multiply(
                         vec![divisor_poly, &loop_align_factor],
                         &gs.field_generator_poly,
                     );
-                    //                    println!("loop_divisor_multiply_factor: {loop_divisor_multiply_factor}");
+                    // println!("loop_divisor_multiply_factor: {loop_divisor_multiply_factor}");
 
                     let loop_substract =
                         galios_poly_add(vec![&remainder, &loop_divisor_multiply_factor]);
-                    //                    println!("loop_substract: {loop_substract}");
+                    // println!("loop_substract: {loop_substract}");
 
                     remainder = loop_substract;
 
@@ -110,12 +110,22 @@ mod tests {
     fn test_galios_poly_divide_8() {
         let gs = new_gs_from_poly(8, "x8+x4+x3+x2+1");
 
-        let result = galios_poly_divide(
+        let result1 = galios_poly_divide(
             "11x33+94x32+132x31+202x30+153x29+38x28+98x27+136x26+183x25+101x24+175x23+127x22+122x21+33x20+121x19+118x18+133x17+96x16+6x15+94x14+173x13+232x12+200x11+48x10+3x9+219x8+224x7+239x6+216x5+107x4+66x3+151x2+44x1+6x0",
             "36x32+37x31+13x30+230x29+157x28+251x27+89x26+97x25+221x24+53x23+142x22+10x21+202x20+78x19+105x18+212x17+173x16+81x15+226x14+58x13+142x12+94x11+216x10+37x9+170x8+227x7+216x6+51x5+65x4+104x3+57x2+150x1+46x0",
             &gs);
-        assert_eq!("135x+225", result.0);
+        assert_eq!("135x+225", result1.0);
         assert_eq!("90x31+37x30+110x29+211x28+242x27+150x26+94x25+229x24+231x23+222x22+79x21+189x20+15x18+223x17+148x16+99x15+33x14+35x13+173x12+129x11+106x10+246x9+160x8+174x7+24x6+252x5+83x4+244x3+243x2+107x+80",
-                   result.1);
+                   result1.1);
+
+        let result2 = galios_poly_divide(
+            "x32",
+            "17x15+0x14+135x13+209x12+16x11+239x10+171x9+210x8+53x7+216x6+13x5+247x4+89x3+197x2+161x+90",
+            &gs);
+        assert_eq!("114x17+153x15+195x14+25x13+38x12+189x11+139x10+174x9+104x8+22x7+45x6+229x5+58x4+156x3+176x2+122x+156", result2.0);
+        assert_eq!(
+            "184x14+68x13+149x12+137x11+209x10+182x9+32x8+48x7+2x6+235x5+100x4+19x3+189x2+88x+80",
+            result2.1
+        );
     }
 }
