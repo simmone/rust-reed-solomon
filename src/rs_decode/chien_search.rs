@@ -2,6 +2,7 @@ use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::poly_to_items::poly_to_items;
 use crate::field_math::pitem::Pitem;
+use std::str::FromStr;
 
 fn chien_value(lam_poly: &str, seq: u32, gs: &GaliosContext) -> u32 {
     println!("lam_poly: {lam_poly}, seq: {seq}");
@@ -14,8 +15,19 @@ fn chien_value(lam_poly: &str, seq: u32, gs: &GaliosContext) -> u32 {
     
     let result_list: Vec<u32> = lam_items.iter().map(
         |pitem| {
-            println!("1. 2^m_1_seq({m2_1_seq}) * index({}) = {}", pitem.x_index, pitem.coe);
-            4
+            let last_multiply_index = m2_1_seq * pitem.x_index;
+            println!("1. 2^m_1_seq({m2_1_seq}) * x_index({}) = {last_multiply_index}", pitem.x_index);
+
+            let convert_coe_to_index = u32::from_str(&gs.galios_number_to_index_hash.get(&pitem.coe).unwrap()[1..]).unwrap();
+            println!("2. convert_coe_to_index {} = {}", pitem.coe, convert_coe_to_index);
+
+            let add_and_modulo = (convert_coe_to_index + last_multiply_index) % m2_1;
+            println!("3. add and modulo = ({convert_coe_to_index} + {last_multiply_index}) % {m2_1} = {add_and_modulo}");
+
+            let convert_index_to_coe = gs.galios_index_to_number_hash.get(&format!("a{add_and_modulo}")).unwrap();
+            println!("convert_index_to_coe = from {add_and_modulo} to {convert_index_to_coe}\n");
+            
+            convert_index_to_coe
         })
         .collect();
     
