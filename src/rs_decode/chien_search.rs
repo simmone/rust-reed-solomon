@@ -1,7 +1,6 @@
 use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::poly_to_items::poly_to_items;
-use crate::field_math::pitem::Pitem;
 use std::str::FromStr;
 
 fn chien_value(lam_poly: &str, seq: u32, gs: &GaliosContext) -> u32 {
@@ -27,13 +26,13 @@ fn chien_value(lam_poly: &str, seq: u32, gs: &GaliosContext) -> u32 {
             let convert_index_to_coe = gs.galios_index_to_number_hash.get(&format!("a{add_and_modulo}")).unwrap();
             println!("convert_index_to_coe = from {add_and_modulo} to {convert_index_to_coe}\n");
             
-            convert_index_to_coe
+            *convert_index_to_coe
         })
         .collect();
     
     println!("result_list: {:?}", result_list);
 
-    0u32
+    result_list.into_iter().reduce(|acc, x| acc ^ x).unwrap()
 }
 
 #[cfg(test)]
