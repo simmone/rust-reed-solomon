@@ -4,7 +4,7 @@ use crate::field_math::get_code_generator_poly::get_code_generator_poly;
 use crate::field_math::poly_to_items::poly_to_items;
 
 pub fn rs_encode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
-    rs_encode_common(data_list, 8, parity_length, 285)
+    rs_encode_common(data_list, parity_length, 8, 285)
 }
 
 pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
@@ -16,8 +16,8 @@ pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
 
 pub fn rs_encode_common(
     data_list: Vec<u32>,
-    bit_width: u32,
     parity_length: u32,
+    bit_width: u32,
     primitive_poly_value: u64,
 ) -> Vec<u32> {
     // println!("data_list: {:?}", data_list);
@@ -124,7 +124,7 @@ mod tests {
 
         assert_eq!(
             vec![15, 11, 11, 0, 15],
-            rs_encode_common(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 4, 5, 19)
+            rs_encode_common(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 5, 4, 19)
         );
     }
 
