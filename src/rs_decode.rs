@@ -8,6 +8,8 @@ pub mod forney;
 
 use crate::field_math::galios_context::new_gs_from_value;
 use crate::rs_decode::get_syndrome::get_syndrome;
+use crate::rs_decode::error_locator::error_locator;
+use crate::rs_decode::chien_search::chien_search;
 
 pub fn rs_decode(
     data_list: Vec<u32>,
@@ -44,7 +46,23 @@ pub fn rs_decode(
     if syndromes.len() == 0 {
         data_list
      } else {
-        Vec::new()
+        let result = error_locator(syndromes, t_length, &gs);
+        if result.is_err() {
+            data_list
+        } else {
+            let (ome_poly, lam_poly) = result.ok().unwrap();
+            println!("error_locator: ome_poly: {ome_poly}, lam_poly: {lam_poly}");
+
+            let err_places = chien_search(&lam_poly, &gs);
+            println!("chien_search: err_places: {:?}", err_places);
+            
+            if err_places.len() == 0 {
+                data_list
+            } else {
+                let err_correct_pairs (forney lam_poly ome_poly err_places))
+        
+            Vec::new()
+        }
      }
 }
 
