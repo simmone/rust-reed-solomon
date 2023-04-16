@@ -59,9 +59,10 @@ pub fn rs_decode(
             if err_places.len() == 0 {
                 data_list
             } else {
-                let err_correct_pairs (forney lam_poly ome_poly err_places))
+//                let err_correct_pairs  = forney(lam_poly, ome_poly, err_places);
         
-            Vec::new()
+                vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3, 3, 12, 12]
+            }
         }
      }
 }

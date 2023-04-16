@@ -1,6 +1,8 @@
 use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::poly_to_items::poly_to_items;
+use crate::field_math::items_to_poly::items_to_poly;
+use crate::field_math::galios_poly_divide::galios_poly_divide;
 use std::str::FromStr;
 
 fn calculate_factor(ome_poly: &str, factor: u32, gs: &GaliosContext) -> u32 {
@@ -57,6 +59,22 @@ fn calculate_factor(ome_poly: &str, factor: u32, gs: &GaliosContext) -> u32 {
     result
 }
 
+pub fn forney(lam_poly: &str, ome_poly: &str, err_places: &Vec<u32>, gs: &GaliosContext) -> Vec<(u32, u32)> {
+    println!("forney");
+    println!("lam_poly: {lam_poly}");
+    println!("ome_poly: {ome_poly}");
+    println!("err_places: {:?}", err_places);
+
+    let lam_items = poly_to_items(lam_poly);
+    let only_odd_poly = items_to_poly(lam_items.into_iter().filter(|item| item.x_index % 2 != 0).collect());
+    println!("remove lam_poly's even index part: {only_odd_poly}");
+
+    let (derivative_lam, _) = galios_poly_divide(&only_odd_poly, "x", &gs);
+    println!("galios_poly_divide({only_odd_poly}, \"x\")'s quotient = {derivative_lam}");
+
+    vec![(0, 0)]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -66,5 +84,7 @@ mod tests {
         let gs = new_gs_from_value(4, 19);
 
         assert_eq!(0, calculate_factor("6x+15", 6, &gs));
+
+        assert_eq!(vec![(9, 13),  (2, 2)], forney("14x2+14x+1", "6x+15", &vec![9, 2], &gs)); 
     }
 }
