@@ -10,6 +10,7 @@ use crate::field_math::galios_context::new_gs_from_value;
 use crate::rs_decode::chien_search::chien_search;
 use crate::rs_decode::error_locator::error_locator;
 use crate::rs_decode::get_syndrome::get_syndrome;
+use crate::rs_decode::forney::forney;
 
 pub fn rs_decode(
     data_list: Vec<u32>,
@@ -40,7 +41,7 @@ pub fn rs_decode(
 
     println!("appended_data_list: {:?}", appended_data_list);
 
-    let syndromes = get_syndrome(appended_data_list, t_length * 2, &gs);
+    let syndromes = get_syndrome(appended_data_list.clone(), t_length * 2, &gs);
     println!("syndromes: {:?}", syndromes);
 
     if syndromes.len() == 0 {
@@ -59,9 +60,24 @@ pub fn rs_decode(
             if err_places.len() == 0 {
                 data_list
             } else {
-                //                let err_correct_pairs  = forney(lam_poly, ome_poly, err_places);
+                let err_correct_pairs  = forney(&lam_poly, &ome_poly, &err_places, &gs);
+                println!("err_correct_pairs = forney({lam_poly}, {ome_poly}, {:?}, &gs = {:?}", err_places, err_correct_pairs);
+                
+                appended_data_list.reverse();
+                
+                for correct_pair in err_correct_pairs {
+                    if let Some(err_data) = appended_data_list.get_mut(correct_pair.0 as usize) {
+                        print!("{:?} ^ appended_data_list.get({:?}): {err_data}", correct_pair.1, correct_pair.0);
 
-                vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3, 3, 12, 12]
+                        *err_data = correct_pair.1 ^ *err_data;
+                    
+                        println!(" = {err_data}");
+                    }
+                }
+                
+                appended_data_list.reverse();
+
+                appended_data_list
             }
         }
     }

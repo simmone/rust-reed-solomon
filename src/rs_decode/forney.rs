@@ -90,10 +90,10 @@ pub fn forney(
             let m2_1 = 2u32.pow(gs.bit_width) - 1;
             let factor = m2_1 - error_index;
             println!("m2_1 - {error_index} = {factor}");
-            
+
             let ome_a = calculate_factor(&ome_poly, factor, &gs);
             println!("ome_a = calculate_factor({ome_poly}, {factor}) = {ome_a}");
-                 
+
             let delam_a = calculate_factor(&derivative_lam, factor, &gs);
             println!("delam_a = calculate_factor({derivative_lam}, {factor}) = {delam_a}");
 
@@ -106,7 +106,10 @@ pub fn forney(
             let modulo_a = positive_a % m2_1;
             println!("modulo_a = {positive_a} % {m2_1} = {modulo_a}");
 
-            let result_n = gs.galios_index_to_number_hash.get(&format!("a{modulo_a}")).unwrap();
+            let result_n = gs
+                .galios_index_to_number_hash
+                .get(&format!("a{modulo_a}"))
+                .unwrap();
             println!("result_n: {result_n}");
 
             (*error_index, *result_n)
@@ -124,9 +127,30 @@ mod tests {
 
         assert_eq!(0, calculate_factor("6x+15", 6, &gs));
 
+        assert_eq!(4, calculate_factor("10x+2", 6, &gs));
+
+        assert_eq!(14, calculate_factor("10x+2", 13, &gs));
+
+        assert_eq!(11, calculate_factor("14", 6, &gs));
+
         assert_eq!(
             vec![(9, 13), (2, 2)],
             forney("14x2+14x+1", "6x+15", &vec![9, 2], &gs)
         );
+    }
+
+    #[test]
+    fn test_forney8() {
+        let gs = new_gs_from_value(8, 285);
+
+        assert_eq!(
+            vec![(116, 172), (102, 22)],
+            forney(
+                "62x8+237x7+88x6+121x5+63x4+218x3+249x2+179x+1",
+                "152x7+230x6+254x5+208x4+156x3+118x2+152x+134",
+                &vec![116, 102],
+                &gs
+            )
+        )
     }
 }
