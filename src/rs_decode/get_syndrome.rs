@@ -8,15 +8,15 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
     let mut result_list: Vec<u32> = vec![];
 
     'main: loop {
-        // println!("result_list: {:?}", result_list);
+        println!("result_list: {:?}", result_list);
 
         let ax = format!("a{loop_parity_index}");
 
-        // println!("ax: {ax}");
+        println!("ax: {ax}");
 
         let ax_val = gs.galios_index_to_number_hash.get(&ax).unwrap();
 
-        // println!("ax_val: {ax_val}");
+        println!("ax_val: {ax_val}");
 
         if loop_parity_index < parity_length {
             loop_parity_index += 1;
@@ -31,10 +31,10 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
                         let ax_multiply =
                             galios_num_multiply(last_xor_result, *ax_val, &gs.field_generator_poly);
 
-                        // println!(
-                        //    "{0: >3} ^ {1: <3} = {2: <3} galios_num_multiply {3: <3} = {4: <4}",
-                        //    last_result, i, last_xor_result, ax_val, ax_multiply
-                        // );
+                        println!(
+                            "{0: >3} ^ {1: <3} = {2: <3} galios_num_multiply {3: <3} = {4: <4}",
+                            last_result, i, last_xor_result, ax_val, ax_multiply
+                        );
                         last_result = ax_multiply;
                         continue 'step;
                     }
@@ -48,12 +48,27 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
         }
     }
 
-    result_list.reverse();
+    let result_iter = result_list.reverse().iter();
 
-    match result_list.strip_prefix(&[0]) {
-        Some(striped_result) => striped_result.to_vec(),
-        None => result_list,
+    let mut strip_prefix_zero_list = Vec::<u32>::new();
+    
+    let prefix_0 = true;
+    loop {
+        match result_iter.next() {
+            Some(item) => {
+                if prefix_0 && (item == 0) {
+                    continue;
+                } else {
+                    prefix_0 = false;
+
+                    strip_prefix_zero_list.push(item);
+                }
+            },
+            None => break,
+        }
     }
+    
+    strip_prefix_zero_list
 }
 
 #[cfg(test)]
@@ -117,6 +132,27 @@ mod tests {
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                 ],
                 16,
+                &gs
+            )
+        );
+
+        assert_eq!(
+            Vec::<u32>::new(),
+            get_syndrome(
+                vec![
+                    32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35,
+                    39, 119, 235, 215, 231, 226, 93, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0
+                ],
+                10,
                 &gs
             )
         )
