@@ -8,15 +8,15 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
     let mut result_list: Vec<u32> = vec![];
 
     'main: loop {
-        println!("result_list: {:?}", result_list);
+        //println!("result_list: {:?}", result_list);
 
         let ax = format!("a{loop_parity_index}");
 
-        println!("ax: {ax}");
+        //println!("ax: {ax}");
 
         let ax_val = gs.galios_index_to_number_hash.get(&ax).unwrap();
 
-        println!("ax_val: {ax_val}");
+        //println!("ax_val: {ax_val}");
 
         if loop_parity_index < parity_length {
             loop_parity_index += 1;
@@ -31,10 +31,10 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
                         let ax_multiply =
                             galios_num_multiply(last_xor_result, *ax_val, &gs.field_generator_poly);
 
-                        println!(
-                            "{0: >3} ^ {1: <3} = {2: <3} galios_num_multiply {3: <3} = {4: <4}",
-                            last_result, i, last_xor_result, ax_val, ax_multiply
-                        );
+                        //println!(
+                        //    "{0: >3} ^ {1: <3} = {2: <3} galios_num_multiply {3: <3} = {4: <4}",
+                        //    last_result, i, last_xor_result, ax_val, ax_multiply
+                        //);
                         last_result = ax_multiply;
                         continue 'step;
                     }
