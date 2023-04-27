@@ -48,26 +48,28 @@ pub fn get_syndrome(data_list: Vec<u32>, parity_length: u32, gs: &GaliosContext)
         }
     }
 
-    let result_iter = result_list.reverse().iter();
+    result_list.reverse();
+
+    let mut result_iter = result_list.iter();
 
     let mut strip_prefix_zero_list = Vec::<u32>::new();
-    
-    let prefix_0 = true;
+
+    let mut prefix_0 = true;
     loop {
         match result_iter.next() {
             Some(item) => {
-                if prefix_0 && (item == 0) {
+                if prefix_0 && (*item == 0) {
                     continue;
                 } else {
                     prefix_0 = false;
 
-                    strip_prefix_zero_list.push(item);
+                    strip_prefix_zero_list.push(*item);
                 }
-            },
+            }
             None => break,
         }
     }
-    
+
     strip_prefix_zero_list
 }
 
