@@ -157,6 +157,17 @@ mod tests {
                 19
             )
         );
+
+        // odd parity length
+        assert_eq!(
+            vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 11, 11, 0, 15],
+            rs_decode_common(
+                vec![1, 2, 3, 4, 5, 11, 7, 8, 9, 0, 11, 15, 11, 11, 0, 15],
+                5,
+                4,
+                19)
+        );
+
     }
 
     #[test]
@@ -223,7 +234,6 @@ mod tests {
                 10)
         );
 
-
         // can't fix 6 errors
         assert_ne!(
             vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
@@ -232,4 +242,47 @@ mod tests {
                 10)
         );
     }
+    
+    #[test]
+    fn test_rs_decode_string() {
+        let mut err_str_bytes: Vec<u32> = "Chen Xiao is just a progr54321.".bytes().map(|item| item as u32).collect();
+        let mut parity_bytes: Vec<u32> = vec![250, 189, 109, 169, 189, 181, 76, 72, 94, 173];
+        err_str_bytes.append(&mut parity_bytes);
+        assert_eq!(
+            b"Chen Xiao is just a programmer.".iter().map(|item| *item as u32).collect::<Vec<u32>>(),
+            rs_decode(
+                err_str_bytes,
+                10
+            )[..31]
+        );
+    }
+
+    #[test]
+    fn test_rs_decode_string_6_errors_canot_recover() {
+        let mut err_str_bytes: Vec<u32> = "Chen Xiao is just a prog654321.".bytes().map(|item| item as u32).collect();
+        let mut parity_bytes: Vec<u32> = vec![250, 189, 109, 169, 189, 181, 76, 72, 94, 173];
+        err_str_bytes.append(&mut parity_bytes);
+        assert_ne!(
+            b"Chen Xiao is just a programmer.".iter().map(|item| *item as u32).collect::<Vec<u32>>(),
+            rs_decode(
+                err_str_bytes,
+                10
+            )[..31]
+        );
+    }
+
+    #[test]
+    fn test_rs_decode_recover_17_errors() {
+        let mut err_str_bytes: Vec<u32> = "Chen Xiao is a fabulous artist.".bytes().map(|item| item as u32).collect();
+        let mut parity_bytes: Vec<u32> = vec![201, 232, 253, 243, 90, 249, 138, 230, 111, 33, 73, 65, 232, 242, 136, 181, 174, 184, 191, 159, 231, 30, 32, 155, 76, 22, 129, 29, 204, 46, 200, 46, 101, 46];
+        err_str_bytes.append(&mut parity_bytes);
+        assert_eq!(
+            b"Chen Xiao is just a programmer.".iter().map(|item| *item as u32).collect::<Vec<u32>>(),
+            rs_decode(
+                err_str_bytes,
+                34
+            )[..31]
+        );
+    }
+
 }
