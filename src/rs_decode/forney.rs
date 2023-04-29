@@ -6,7 +6,7 @@ use crate::field_math::poly_to_items::poly_to_items;
 use std::str::FromStr;
 
 fn calculate_factor(ome_poly: &str, factor: u32, gs: &GaliosContext) -> u32 {
-    println!("calculate_factor: ome_poly: {ome_poly}, factor: {factor}");
+    //println!("calculate_factor: ome_poly: {ome_poly}, factor: {factor}");
 
     let ome_items = poly_to_items(ome_poly);
 
@@ -18,31 +18,31 @@ fn calculate_factor(ome_poly: &str, factor: u32, gs: &GaliosContext) -> u32 {
             let coe_to_a =
                 u32::from_str(&gs.galios_number_to_index_hash.get(&pitem.coe).unwrap()[1..])
                     .unwrap();
-            println!("coe_to_a: {coe_to_a}");
+            //println!("coe_to_a: {coe_to_a}");
 
             let index_multiply_factor = factor * pitem.x_index;
-            println!("index_multiply_factor: {index_multiply_factor}");
+            //println!("index_multiply_factor: {index_multiply_factor}");
 
             let coe_add_last_result = coe_to_a + index_multiply_factor;
-            println!("coe_add_last_result: {coe_add_last_result}");
+            //println!("coe_add_last_result: {coe_add_last_result}");
 
             let modulo_last_result = coe_add_last_result % m2_1;
-            println!("modulo_last_result: {modulo_last_result}");
+            //println!("modulo_last_result: {modulo_last_result}");
 
             let index_number = gs
                 .galios_index_to_number_hash
                 .get(&format!("a{modulo_last_result}"))
                 .unwrap();
-            println!("index_number: {index_number}");
+            //println!("index_number: {index_number}");
 
             *index_number
         })
         .collect();
 
-    println!("index_list: {:?}", index_list);
+    //println!("index_list: {:?}", index_list);
 
     let bitwise_xor_result = index_list.into_iter().reduce(|acc, x| acc ^ x).unwrap();
-    println!("bitwise_xor_result: {:?}", bitwise_xor_result);
+    //println!("bitwise_xor_result: {:?}", bitwise_xor_result);
 
     let result = if bitwise_xor_result == 0 {
         0
@@ -54,7 +54,7 @@ fn calculate_factor(ome_poly: &str, factor: u32, gs: &GaliosContext) -> u32 {
         )
         .unwrap()
     };
-    println!("calculate_factor result: {:?}", result);
+    //println!("calculate_factor result: {:?}", result);
 
     result
 }
@@ -65,10 +65,10 @@ pub fn forney(
     err_places: &Vec<u32>,
     gs: &GaliosContext,
 ) -> Vec<(u32, u32)> {
-    println!("forney");
-    println!("lam_poly: {lam_poly}");
-    println!("ome_poly: {ome_poly}");
-    println!("err_places: {:?}", err_places);
+    //println!("forney");
+    //println!("lam_poly: {lam_poly}");
+    //println!("ome_poly: {ome_poly}");
+    //println!("err_places: {:?}", err_places);
 
     let lam_items = poly_to_items(lam_poly);
     let only_odd_poly = items_to_poly(
@@ -77,40 +77,40 @@ pub fn forney(
             .filter(|item| item.x_index % 2 != 0)
             .collect(),
     );
-    println!("remove lam_poly's even index part: {only_odd_poly}");
+    //println!("remove lam_poly's even index part: {only_odd_poly}");
 
     let (derivative_lam, _) = galios_poly_divide(&only_odd_poly, "x", &gs);
-    println!("galios_poly_divide({only_odd_poly}, \"x\")'s quotient = {derivative_lam}");
+    //println!("galios_poly_divide({only_odd_poly}, \"x\")'s quotient = {derivative_lam}");
 
     err_places
         .iter()
         .map(|error_index| {
-            println!("error_index: {error_index}");
+            //println!("error_index: {error_index}");
 
             let m2_1 = 2u32.pow(gs.bit_width) - 1;
             let factor = m2_1 - error_index;
-            println!("m2_1 - {error_index} = {factor}");
+            //println!("m2_1 - {error_index} = {factor}");
 
             let ome_a = calculate_factor(&ome_poly, factor, &gs);
-            println!("ome_a = calculate_factor({ome_poly}, {factor}) = {ome_a}");
+            //println!("ome_a = calculate_factor({ome_poly}, {factor}) = {ome_a}");
 
             let delam_a = calculate_factor(&derivative_lam, factor, &gs);
-            println!("delam_a = calculate_factor({derivative_lam}, {factor}) = {delam_a}");
+            //println!("delam_a = calculate_factor({derivative_lam}, {factor}) = {delam_a}");
 
             let cal_a: i32 = *error_index as i32 + ome_a as i32 - delam_a as i32;
-            println!("cal_a = {error_index} + {ome_a} - {delam_a} = {cal_a}");
+            //println!("cal_a = {error_index} + {ome_a} - {delam_a} = {cal_a}");
 
             let positive_a = (m2_1 as i32 + cal_a) as u32;
-            println!("positive_a = {m2_1} + {cal_a} = {positive_a}");
+            //println!("positive_a = {m2_1} + {cal_a} = {positive_a}");
 
             let modulo_a = positive_a % m2_1;
-            println!("modulo_a = {positive_a} % {m2_1} = {modulo_a}");
+            //println!("modulo_a = {positive_a} % {m2_1} = {modulo_a}");
 
             let result_n = gs
                 .galios_index_to_number_hash
                 .get(&format!("a{modulo_a}"))
                 .unwrap();
-            println!("result_n: {result_n}");
+            //println!("result_n: {result_n}");
 
             (*error_index, *result_n)
         })

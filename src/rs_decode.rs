@@ -74,10 +74,10 @@ pub fn rs_decode_common(
 
                 for correct_pair in err_correct_pairs {
                     if let Some(err_data) = appended_data_list.get_mut(correct_pair.0 as usize) {
-                        print!(
-                            "{:?} ^ appended_data_list.get({:?}): {err_data}",
-                            correct_pair.1, correct_pair.0
-                        );
+                        //print!(
+                        //    "{:?} ^ appended_data_list.get({:?}): {err_data}",
+                        //    correct_pair.1, correct_pair.0
+                        //);
 
                         *err_data = correct_pair.1 ^ *err_data;
 
@@ -135,7 +135,7 @@ mod tests {
                 19
             )
         );
-        
+
         // 3 errors
         assert_eq!(
             vec![5, 2, 3, 4, 5, 11, 7, 8, 9, 10, 11, 3, 1, 12, 12],
@@ -165,9 +165,9 @@ mod tests {
                 vec![1, 2, 3, 4, 5, 11, 7, 8, 9, 0, 11, 15, 11, 11, 0, 15],
                 5,
                 4,
-                19)
+                19
+            )
         );
-
     }
 
     #[test]
@@ -186,7 +186,7 @@ mod tests {
                 10
             )
         );
-        
+
         // no errors
         assert_eq!(
             vec![
@@ -201,88 +201,134 @@ mod tests {
                 10
             )
         );
-        
+
         // 1 error
         assert_eq!(
-            vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+            vec![
+                32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39,
+                119, 235, 215, 231, 226, 93, 23
+            ],
             rs_decode(
-                   vec![32, 91, 10, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
-                   10)
+                vec![
+                    32, 91, 10, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35,
+                    39, 119, 235, 215, 231, 226, 93, 23
+                ],
+                10
+            )
         );
 
         // 2 errors
         assert_eq!(
-            vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+            vec![
+                32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39,
+                119, 235, 215, 231, 226, 93, 23
+            ],
             rs_decode(
-                vec![32, 91, 10, 120, 208, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
-                10)
+                vec![
+                    32, 91, 10, 120, 208, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35,
+                    39, 119, 235, 215, 231, 226, 93, 23
+                ],
+                10
+            )
         );
-        
+
         // 3 errors
         assert_eq!(
-            vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+            vec![
+                32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39,
+                119, 235, 215, 231, 226, 93, 23
+            ],
             rs_decode(
-                vec![32, 91, 10, 120, 209, 115, 220, 77, 67, 64, 236, 17, 236, 17, 235, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
-                10)
+                vec![
+                    32, 91, 10, 120, 209, 115, 220, 77, 67, 64, 236, 17, 236, 17, 235, 17, 196, 35,
+                    39, 119, 235, 215, 231, 226, 93, 23
+                ],
+                10
+            )
         );
 
         // 4 errors
         assert_eq!(
-            vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+            vec![
+                32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39,
+                119, 235, 215, 231, 226, 93, 23
+            ],
             rs_decode(
-                vec![32, 91, 10, 121, 209, 114, 220, 77, 67, 64, 236, 16, 235, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
-                10)
+                vec![
+                    32, 91, 10, 121, 209, 114, 220, 77, 67, 64, 236, 16, 235, 17, 236, 17, 196, 35,
+                    39, 119, 235, 215, 231, 226, 93, 23
+                ],
+                10
+            )
         );
 
         // can't fix 6 errors
         assert_ne!(
-            vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+            vec![
+                32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 196, 35, 39,
+                119, 235, 215, 231, 226, 93, 23
+            ],
             rs_decode(
-                vec![32, 91, 10, 121, 209, 114, 220, 77, 67, 64, 236, 16, 235, 17, 236, 17, 196, 35, 39, 119, 235, 215, 231, 225, 93, 22],
-                10)
+                vec![
+                    32, 91, 10, 121, 209, 114, 220, 77, 67, 64, 236, 16, 235, 17, 236, 17, 196, 35,
+                    39, 119, 235, 215, 231, 225, 93, 22
+                ],
+                10
+            )
         );
     }
-    
+
     #[test]
     fn test_rs_decode_string() {
-        let mut err_str_bytes: Vec<u32> = "Chen Xiao is just a progr54321.".bytes().map(|item| item as u32).collect();
+        let mut err_str_bytes: Vec<u32> = "Chen Xiao is just a progr54321."
+            .bytes()
+            .map(|item| item as u32)
+            .collect();
         let mut parity_bytes: Vec<u32> = vec![250, 189, 109, 169, 189, 181, 76, 72, 94, 173];
         err_str_bytes.append(&mut parity_bytes);
         assert_eq!(
-            b"Chen Xiao is just a programmer.".iter().map(|item| *item as u32).collect::<Vec<u32>>(),
-            rs_decode(
-                err_str_bytes,
-                10
-            )[..31]
+            b"Chen Xiao is just a programmer."
+                .iter()
+                .map(|item| *item as u32)
+                .collect::<Vec<u32>>(),
+            rs_decode(err_str_bytes, 10)[..31]
         );
     }
 
     #[test]
     fn test_rs_decode_string_6_errors_canot_recover() {
-        let mut err_str_bytes: Vec<u32> = "Chen Xiao is just a prog654321.".bytes().map(|item| item as u32).collect();
+        let mut err_str_bytes: Vec<u32> = "Chen Xiao is just a prog654321."
+            .bytes()
+            .map(|item| item as u32)
+            .collect();
         let mut parity_bytes: Vec<u32> = vec![250, 189, 109, 169, 189, 181, 76, 72, 94, 173];
         err_str_bytes.append(&mut parity_bytes);
         assert_ne!(
-            b"Chen Xiao is just a programmer.".iter().map(|item| *item as u32).collect::<Vec<u32>>(),
-            rs_decode(
-                err_str_bytes,
-                10
-            )[..31]
+            b"Chen Xiao is just a programmer."
+                .iter()
+                .map(|item| *item as u32)
+                .collect::<Vec<u32>>(),
+            rs_decode(err_str_bytes, 10)[..31]
         );
     }
 
     #[test]
     fn test_rs_decode_recover_17_errors() {
-        let mut err_str_bytes: Vec<u32> = "Chen Xiao is a fabulous artist.".bytes().map(|item| item as u32).collect();
-        let mut parity_bytes: Vec<u32> = vec![201, 232, 253, 243, 90, 249, 138, 230, 111, 33, 73, 65, 232, 242, 136, 181, 174, 184, 191, 159, 231, 30, 32, 155, 76, 22, 129, 29, 204, 46, 200, 46, 101, 46];
+        let mut err_str_bytes: Vec<u32> = "Chen Xiao is a fabulous artist."
+            .bytes()
+            .map(|item| item as u32)
+            .collect();
+        let mut parity_bytes: Vec<u32> = vec![
+            201, 232, 253, 243, 90, 249, 138, 230, 111, 33, 73, 65, 232, 242, 136, 181, 174, 184,
+            191, 159, 231, 30, 32, 155, 76, 22, 129, 29, 204, 46, 200, 46, 101, 46,
+        ];
         err_str_bytes.append(&mut parity_bytes);
         assert_eq!(
-            b"Chen Xiao is just a programmer.".iter().map(|item| *item as u32).collect::<Vec<u32>>(),
-            rs_decode(
-                err_str_bytes,
-                34
-            )[..31]
+            b"Chen Xiao is just a programmer."
+                .iter()
+                .map(|item| *item as u32)
+                .collect::<Vec<u32>>(),
+            rs_decode(err_str_bytes, 34)[..31]
         );
     }
-
 }
