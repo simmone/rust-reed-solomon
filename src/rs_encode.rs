@@ -1,3 +1,5 @@
+//! # rs_encode: encode `Vec<u32>` to generate parity length's data.
+
 use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_num_multiply::galios_num_multiply;
 use crate::field_math::get_code_generator_poly::get_code_generator_poly;

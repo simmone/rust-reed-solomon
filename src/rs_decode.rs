@@ -12,6 +12,19 @@ use crate::rs_decode::error_locator::error_locator;
 use crate::rs_decode::forney::forney;
 use crate::rs_decode::get_syndrome::get_syndrome;
 
+/// # Example
+///
+/// ```
+/// assert_eq!(
+///   vec![2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3, 3, 12, 11],
+///   reed_solomon_cx::rs_decode_common(
+///     vec![1, 2, 3, 4, 5, 11, 7, 8, 9, 10, 11, 3, 1, 12, 12],
+///     4,
+///     4,
+///     19
+///   )
+/// )
+/// ```
 pub fn rs_decode_common(
     data_list: Vec<u32>,
     parity_length: u32,

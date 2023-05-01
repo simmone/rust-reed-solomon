@@ -1,3 +1,5 @@
+//! field_math contains all the needed field math functions.
+
 pub mod pitem;
 
 pub mod galios_context;
