@@ -35,4 +35,4 @@ pub mod rs_encode;
 
 pub mod rs_decode;
 
-mod field_math;
+pub mod field_math;
