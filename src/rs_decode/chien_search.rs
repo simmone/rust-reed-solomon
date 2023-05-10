@@ -1,4 +1,3 @@
-use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::poly_to_items::poly_to_items;
 use std::str::FromStr;
@@ -70,7 +69,7 @@ mod tests {
 
     #[test]
     fn test_chien_search4() {
-        let gs = new_gs_from_value(4, 19);
+        let gs = crate::field_math::galios_context::new_gs_from_value(4, 19);
 
         assert_eq!(3, chien_value("14x2+14x1+1", 14, &gs));
         assert_eq!(13, chien_value("14x2+14x1+1", 13, &gs));
@@ -93,7 +92,7 @@ mod tests {
 
     #[test]
     fn test_chien_search8() {
-        let gs = new_gs_from_value(8, 285);
+        let gs = crate::field_math::galios_context::new_gs_from_value(8, 285);
 
         assert_eq!(
             Vec::<u32>::new(),

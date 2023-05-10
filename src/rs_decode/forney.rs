@@ -1,4 +1,3 @@
-use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_context::GaliosContext;
 use crate::field_math::galios_poly_divide::galios_poly_divide;
 use crate::field_math::items_to_poly::items_to_poly;
@@ -123,7 +122,7 @@ mod tests {
 
     #[test]
     fn test_forney4() {
-        let gs = new_gs_from_value(4, 19);
+        let gs = crate::field_math::galios_context::new_gs_from_value(4, 19);
 
         assert_eq!(0, calculate_factor("6x+15", 6, &gs));
 
@@ -141,7 +140,7 @@ mod tests {
 
     #[test]
     fn test_forney8() {
-        let gs = new_gs_from_value(8, 285);
+        let gs = crate::field_math::galios_context::new_gs_from_value(8, 285);
 
         assert_eq!(
             vec![(116, 172), (102, 22)],

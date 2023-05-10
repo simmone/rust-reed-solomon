@@ -1,14 +1,28 @@
-//! # rs_encode: encode `Vec<u32>` to generate parity length's data.
+//! # encode `Vec<u32>` to generate parity length's data.
 
 use crate::field_math::galios_context::new_gs_from_value;
 use crate::field_math::galios_num_multiply::galios_num_multiply;
 use crate::field_math::get_code_generator_poly::get_code_generator_poly;
 use crate::field_math::poly_to_items::poly_to_items;
 
+/// encode `Vec<u32>` data to generate parity data, use bit_width: 8, primitive_poly_value: 285
+/// # Examples
+/// ```
+/// // generate 10 parity data, it can fix 5 errors at most
+///        assert_eq!(
+///            vec![196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+///            reed_solomon_cx::rs_encode::rs_encode(
+///                vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17],
+///                10
+///            )
+///        );
+/// ```
+
 pub fn rs_encode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
     rs_encode_common(data_list, parity_length, 8, 285)
 }
 
+/// encode &str to generate pairy data(8, 285)
 pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
     rs_encode(
         data_str.bytes().map(|i| u32::from(i)).collect(),
@@ -16,6 +30,7 @@ pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
     )
 }
 
+/// encode `Vec<u32>` data to generate parity data, use specific bit_width and primitive_poly_value
 pub fn rs_encode_common(
     data_list: Vec<u32>,
     parity_length: u32,
