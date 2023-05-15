@@ -9,20 +9,27 @@ use crate::field_math::poly_to_items::poly_to_items;
 /// # Examples
 /// ```
 /// // generate 10 parity data, it can fix 5 errors at most
-///        assert_eq!(
-///            vec![196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
-///            reed_solomon_cx::rs_encode::rs_encode(
-///                vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17],
-///                10
-///            )
-///        );
+/// assert_eq!(
+///   vec![196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+///   reed_solomon_cx::rs_encode::rs_encode(
+///     vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17],
+///     10
+///   )
+/// );
 /// ```
-
 pub fn rs_encode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
     rs_encode_common(data_list, parity_length, 8, 285)
 }
 
 /// encode &str to generate pairy data(8, 285)
+/// # Examples
+/// // convert string to `Vec<u32>`, then generate 10 parity data, it can fix 5 chars error at most
+/// ```
+/// assert_eq!(
+///   vec![250, 189, 109, 169, 189, 181, 76, 72, 94, 173],
+///   reed_solomon_cx::rs_encode::rs_encode_str("Chen Xiao is just a programmer.", 10)
+/// );
+/// ```
 pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
     rs_encode(
         data_str.bytes().map(|i| u32::from(i)).collect(),
@@ -31,6 +38,18 @@ pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
 }
 
 /// encode `Vec<u32>` data to generate parity data, use specific bit_width and primitive_poly_value
+/// # Examples
+/// ```
+/// // bit_width: 4, primitive poly value: 19("x4+x1+1"), 
+/// // generate 4 parity data, it can fix 2 errors at most
+/// assert_eq!(
+///   vec![3, 3, 12, 12],
+///   reed_solomon_cx::rs_encode::rs_encode_common(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+///     4,
+///     4,
+///     19)
+/// );
+/// ```
 pub fn rs_encode_common(
     data_list: Vec<u32>,
     parity_length: u32,
