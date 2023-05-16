@@ -1,10 +1,9 @@
-pub mod get_syndrome;
+//! # decode `Vec<u32>` to fix possible errors
 
-pub mod error_locator;
-
-pub mod chien_search;
-
-pub mod forney;
+mod get_syndrome;
+mod error_locator;
+mod chien_search;
+mod forney;
 
 use crate::field_math::galios_context::new_gs_from_value;
 use crate::rs_decode::chien_search::chien_search;
@@ -12,6 +11,28 @@ use crate::rs_decode::error_locator::error_locator;
 use crate::rs_decode::forney::forney;
 use crate::rs_decode::get_syndrome::get_syndrome;
 
+/// encode `Vec<u32>` data to generate parity data, use bit_width: 8, primitive_poly_value: 285
+/// # Examples
+/// ```
+/// // original data: vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17,
+/// //                     196, 35, 39, 119, 235, 215, 231, 226, 93, 23]
+/// // make 5 errors: vec![33, 91, 11, 120, 219, 144, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17,
+/// //                     196, 35, 39, 119, 251, 215, 231, 226, 93, 92]
+/// assert_eq!(
+///   vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17,
+///        196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
+///   reed_solomon_cx::rs_decode::rs_decode(
+///     vec![33, 91, 11, 120, 219, 144, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 
+///          196, 35, 39, 119, 251, 215, 231, 226, 93, 92],
+///     10
+///   )
+/// );
+/// ```
+pub fn rs_decode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
+    rs_decode_common(data_list, parity_length, 8, 285)
+}
+
+/// decode `Vec<u32>` to fix possible errors, use specific bit_width and primitive_poly_value
 /// # Examples
 ///
 /// ```
@@ -104,10 +125,6 @@ pub fn rs_decode_common(
             }
         }
     }
-}
-
-pub fn rs_decode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
-    rs_decode_common(data_list, parity_length, 8, 285)
 }
 
 #[cfg(test)]
