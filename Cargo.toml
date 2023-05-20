@@ -1,9 +1,12 @@
 [package]
 name = "reed-solomon-cx"
 license = "MIT OR Apache-2.0"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Reed Solomon's implementation by Chen Xiao"
+documentation = "https://docs.rs/reed-solomon-cx/0.1.0/reed_solomon_cx/"
+homepage = "https://crates.io/crates/reed-solomon-cx"
+repository = "https://github.com/simmone/rust-reed-solomon"
 
 [dependencies]
 lazy_static = "1.4.0"
