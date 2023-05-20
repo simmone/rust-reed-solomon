@@ -1,7 +1,9 @@
 [package]
 name = "reed-solomon-cx"
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 edition = "2021"
+description = "Reed Solomon's implementation by Chen Xiao"
 
 [dependencies]
 lazy_static = "1.4.0"
