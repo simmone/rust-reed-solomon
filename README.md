@@ -1,5 +1,5 @@
 # reed_solomon_cx
-# _a [Reed-Solomon](https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction) error correction algorithm implementation for Rust lang._
+# a clone project from Racket Lang's library: racket-reed-solomon(https://github.com/simmone/racket-reed-solomon)
 
 ### basic usage: 
 ### 1. use rs_encode to generate parity length data.
