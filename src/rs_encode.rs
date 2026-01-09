@@ -32,7 +32,7 @@ pub fn rs_encode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
 /// ```
 pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
     rs_encode(
-        data_str.bytes().map(|i| u32::from(i)).collect(),
+        data_str.bytes().map(u32::from).collect(),
         parity_length,
     )
 }
