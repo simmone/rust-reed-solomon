@@ -1,9 +1,9 @@
 //! # decode `Vec<u32>` to fix possible errors
 
-mod get_syndrome;
-mod error_locator;
 mod chien_search;
+mod error_locator;
 mod forney;
+mod get_syndrome;
 
 use crate::field_math::galios_context::new_gs_from_value;
 use crate::rs_decode::chien_search::chien_search;
@@ -22,7 +22,7 @@ use crate::rs_decode::get_syndrome::get_syndrome;
 ///   vec![32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17,
 ///        196, 35, 39, 119, 235, 215, 231, 226, 93, 23],
 ///   reed_solomon_cx::rs_decode::rs_decode(
-///     vec![33, 91, 11, 120, 219, 144, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17, 
+///     vec![33, 91, 11, 120, 219, 144, 220, 77, 67, 64, 236, 17, 236, 17, 236, 17,
 ///          196, 35, 39, 119, 251, 215, 231, 226, 93, 92],
 ///     10
 ///   )

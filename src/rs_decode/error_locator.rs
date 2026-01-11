@@ -82,11 +82,11 @@ pub fn error_locator(
                 // println!("last_coe: {last_coe}, last_index: {last_index}");
 
                 let (ome_quotient, _ome_remainder) =
-                    galios_poly_divide(&remainder, &last_coe.to_string(), &gs);
+                    galios_poly_divide(&remainder, &last_coe.to_string(), gs);
                 // println!("galios_poly_divide({remainder}, {last_coe}) = (ome_quotient: {ome_quotient}, ome_remainder: {_ome_remainder})");
 
                 let (lam_quotient, _lam_remainder) =
-                    galios_poly_divide(&loop_result, &last_coe.to_string(), &gs);
+                    galios_poly_divide(&loop_result, &last_coe.to_string(), gs);
                 // println!("galios_poly_divide({loop_result}, {last_coe}) = (lam_quotient: {lam_quotient}, lam_remainder: {_lam_remainder})");
 
                 // println!("result: (ome_quotient, lam_quotient) = ({ome_quotient}, {lam_quotient})");

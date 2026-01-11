@@ -31,16 +31,13 @@ pub fn rs_encode(data_list: Vec<u32>, parity_length: u32) -> Vec<u32> {
 /// );
 /// ```
 pub fn rs_encode_str(data_str: &str, parity_length: u32) -> Vec<u32> {
-    rs_encode(
-        data_str.bytes().map(u32::from).collect(),
-        parity_length,
-    )
+    rs_encode(data_str.bytes().map(u32::from).collect(), parity_length)
 }
 
 /// encode `Vec<u32>` data to generate parity data, use specific bit_width and primitive_poly_value
 /// # Examples
 /// ```
-/// // bit_width: 4, primitive poly value: 19("x4+x1+1"), 
+/// // bit_width: 4, primitive poly value: 19("x4+x1+1"),
 /// // generate 4 parity data, it can fix 2 errors at most
 /// assert_eq!(
 ///   vec![3, 3, 12, 12],
@@ -96,7 +93,7 @@ pub fn rs_encode_common(
 
         // println!("loop_remainder_list: {:?}", loop_remainder_list);
 
-        if loop_dividend_list.len() != 0 {
+        if !loop_dividend_list.is_empty() {
             let appended_dividend_list =
                 vec![loop_remainder_list, loop_dividend_list[0..1].to_vec()].concat();
             // println!(
@@ -104,7 +101,7 @@ pub fn rs_encode_common(
             //    appended_dividend_list
             // );
 
-            let first_loop_remainder_item = *appended_dividend_list.get(0).unwrap();
+            let first_loop_remainder_item = *appended_dividend_list.first().unwrap();
             let aligned_code_generator_list: Vec<u32> = coefficient_list
                 .iter()
                 .map(|&v| {
@@ -119,14 +116,8 @@ pub fn rs_encode_common(
             let mut remainder_list: Vec<u32> = Vec::new();
             let mut appended_dividend_list_iter = appended_dividend_list.iter();
             let mut aligned_code_generator_list_iter = aligned_code_generator_list.iter();
-            loop {
-                match appended_dividend_list_iter.next() {
-                    Some(item) => {
-                        remainder_list
-                            .push(item ^ aligned_code_generator_list_iter.next().unwrap());
-                    }
-                    None => break,
-                }
+            for item in &mut appended_dividend_list_iter {
+                remainder_list.push(item ^ aligned_code_generator_list_iter.next().unwrap());
             }
 
             // println!(
