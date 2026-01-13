@@ -61,7 +61,7 @@ fn calculate_factor(ome_poly: &str, factor: u32, gs: &GaliosContext) -> u32 {
 pub fn forney(
     lam_poly: &str,
     ome_poly: &str,
-    err_places: &Vec<u32>,
+    err_places: &[u32],
     gs: &GaliosContext,
 ) -> Vec<(u32, u32)> {
     //println!("forney");
@@ -78,7 +78,7 @@ pub fn forney(
     );
     //println!("remove lam_poly's even index part: {only_odd_poly}");
 
-    let (derivative_lam, _) = galios_poly_divide(&only_odd_poly, "x", &gs);
+    let (derivative_lam, _) = galios_poly_divide(&only_odd_poly, "x", gs);
     //println!("galios_poly_divide({only_odd_poly}, \"x\")'s quotient = {derivative_lam}");
 
     err_places
