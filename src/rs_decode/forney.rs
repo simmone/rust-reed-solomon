@@ -90,10 +90,10 @@ pub fn forney(
             let factor = m2_1 - error_index;
             //println!("m2_1 - {error_index} = {factor}");
 
-            let ome_a = calculate_factor(&ome_poly, factor, &gs);
+            let ome_a = calculate_factor(ome_poly, factor, gs);
             //println!("ome_a = calculate_factor({ome_poly}, {factor}) = {ome_a}");
 
-            let delam_a = calculate_factor(&derivative_lam, factor, &gs);
+            let delam_a = calculate_factor(&derivative_lam, factor, gs);
             //println!("delam_a = calculate_factor({derivative_lam}, {factor}) = {delam_a}");
 
             let cal_a: i32 = *error_index as i32 + ome_a as i32 - delam_a as i32;

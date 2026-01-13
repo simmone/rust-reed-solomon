@@ -82,7 +82,7 @@ pub fn rs_decode_common(
     //        syndromes
     //);
 
-    if syndromes.len() == 0 {
+    if syndromes.is_empty() {
         data_list
     } else {
         let result = error_locator(syndromes, t_length, &gs);
@@ -95,7 +95,7 @@ pub fn rs_decode_common(
             let err_places = chien_search(&lam_poly, &gs);
             //println!("chien_search: err_places: {:?}", err_places);
 
-            if err_places.len() == 0 {
+            if err_places.is_empty() {
                 data_list
             } else {
                 let err_correct_pairs = forney(&lam_poly, &ome_poly, &err_places, &gs);
