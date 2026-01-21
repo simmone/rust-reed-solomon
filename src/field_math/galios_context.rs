@@ -110,7 +110,7 @@ pub fn get_galios_index_to_number_hash(
 
         last_val = step3.clone();
 
-        index = index + 1;
+        index += 1;
     }
 
     index_to_number_hash

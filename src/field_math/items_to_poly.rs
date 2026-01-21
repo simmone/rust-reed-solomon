@@ -8,7 +8,7 @@ pub fn items_to_poly(mut items: Vec<Pitem>) -> String {
     let mut result = String::from("");
 
     for item in items.iter() {
-        result = format!("{result}{last_operator}{}", item.to_string());
+        result = format!("{result}{last_operator}{}", item);
 
         last_operator = "+";
     }

@@ -6,7 +6,7 @@ pub fn binary_poly_divide(dividend_poly: &str, divisor_poly: &str) -> String {
     let divisor_poly_bits = binary_poly_to_binary_string(divisor_poly);
     let divisor_bits_length = divisor_poly_bits.len();
 
-    let mut loop_bits: String = String::from(dividend_poly_bits);
+    let mut loop_bits: String = dividend_poly_bits;
 
     let divisor_poly_bits_to_u32 = u32::from_str_radix(&divisor_poly_bits, 2).unwrap();
 

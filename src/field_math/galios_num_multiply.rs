@@ -17,9 +17,7 @@ pub fn galios_num_multiply(num1: u32, num2: u32, field_generator_poly: &str) -> 
 
         let binary_str = binary_poly_to_binary_string(&divide_field_generator);
 
-        let result = u32::from_str_radix(&binary_str, 2).unwrap();
-
-        result
+        u32::from_str_radix(&binary_str, 2).unwrap()
     }
 }
 

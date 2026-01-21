@@ -19,12 +19,12 @@ pub fn poly_to_items(_poly: &str) -> Vec<Pitem> {
                         coe: poly_items[0].parse::<u32>().unwrap(),
                     }),
                     2 => items.push(Pitem {
-                        x_index: if poly_items[1] == "" {
+                        x_index: if poly_items[1].is_empty() {
                             1
                         } else {
                             poly_items[1].parse::<u32>().unwrap()
                         },
-                        coe: if poly_items[0] == "" {
+                        coe: if poly_items[0].is_empty() {
                             1
                         } else {
                             poly_items[0].parse::<u32>().unwrap()
