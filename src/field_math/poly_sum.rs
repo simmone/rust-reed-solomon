@@ -4,7 +4,7 @@ pub fn poly_sum(poly: &str) -> u32 {
     let mut sum = 0;
 
     for pitem in poly_to_items(poly) {
-        sum = sum + (pitem.coe * 2u32.pow(pitem.x_index));
+        sum += pitem.coe * 2u32.pow(pitem.x_index);
     }
 
     sum
