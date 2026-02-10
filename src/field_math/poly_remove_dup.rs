@@ -11,7 +11,7 @@ pub fn poly_remove_dup(poly: &str) -> String {
         if unique_pitem_hash.contains_key(&pitem) {
             unique_pitem_hash.remove(&pitem);
         } else {
-            unique_pitem_hash.insert(pitem, true);
+            unique_pitem_hash.entry(pitem).or_insert(true);
         }
     }
 

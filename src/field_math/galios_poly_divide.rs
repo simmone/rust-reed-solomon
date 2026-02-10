@@ -25,7 +25,7 @@ pub fn galios_poly_divide(
     loop {
         // println!("remainder: {remainder}");
 
-        if remainder != "" {
+        if !remainder.is_empty() {
             let remainder_pitems = poly_to_items(&remainder);
 
             let remainder_index = remainder_pitems[0].x_index;
@@ -38,33 +38,31 @@ pub fn galios_poly_divide(
                 remainder = items_to_poly(remainder_pitems[1..].to_vec());
 
                 continue;
+            } else if remainder_index >= divisor_index {
+                // println!("remainder: {remainder}, divisor: {divisor_poly}");
+
+                let loop_align_factor = galios_poly_divide_align(&remainder, divisor_poly, gs);
+                // println!("loop_align_factor: {loop_align_factor}");
+
+                let loop_divisor_multiply_factor = galios_poly_multiply(
+                    vec![divisor_poly, &loop_align_factor],
+                    &gs.field_generator_poly,
+                );
+                // println!("loop_divisor_multiply_factor: {loop_divisor_multiply_factor}");
+
+                let loop_substract =
+                    galios_poly_add(vec![&remainder, &loop_divisor_multiply_factor]);
+                // println!("loop_substract: {loop_substract}");
+
+                remainder = loop_substract;
+
+                quotient = format!("{quotient}{last_op}{loop_align_factor}");
+
+                last_op = "+".to_string();
+
+                continue;
             } else {
-                if remainder_index >= divisor_index {
-                    // println!("remainder: {remainder}, divisor: {divisor_poly}");
-
-                    let loop_align_factor = galios_poly_divide_align(&remainder, divisor_poly, gs);
-                    // println!("loop_align_factor: {loop_align_factor}");
-
-                    let loop_divisor_multiply_factor = galios_poly_multiply(
-                        vec![divisor_poly, &loop_align_factor],
-                        &gs.field_generator_poly,
-                    );
-                    // println!("loop_divisor_multiply_factor: {loop_divisor_multiply_factor}");
-
-                    let loop_substract =
-                        galios_poly_add(vec![&remainder, &loop_divisor_multiply_factor]);
-                    // println!("loop_substract: {loop_substract}");
-
-                    remainder = loop_substract;
-
-                    quotient = format!("{quotient}{last_op}{loop_align_factor}");
-
-                    last_op = "+".to_string();
-
-                    continue;
-                } else {
-                    break (quotient, remainder);
-                }
+                break (quotient, remainder);
             }
         } else {
             break (quotient, remainder);

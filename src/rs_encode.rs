@@ -73,7 +73,7 @@ pub fn rs_encode_common(
     // println!("coefficient_list: {:?}", coefficient_list);
 
     let mut loop_remainder_list =
-        vec![data_list, vec![0; parity_length.try_into().unwrap()]].concat();
+        [data_list, vec![0; parity_length.try_into().unwrap()]].concat();
 
     // println!(
     //    "appended parity_length's 0's to data_list: {:?}",
@@ -95,7 +95,7 @@ pub fn rs_encode_common(
 
         if !loop_dividend_list.is_empty() {
             let appended_dividend_list =
-                vec![loop_remainder_list, loop_dividend_list[0..1].to_vec()].concat();
+                [loop_remainder_list, loop_dividend_list[0..1].to_vec()].concat();
             // println!(
             //    "step1: remainder list + first item of rest dividend list = {:?} as dividend",
             //    appended_dividend_list
